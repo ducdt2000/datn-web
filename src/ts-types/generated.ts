@@ -245,11 +245,11 @@ export declare type TypeSettings = {
 };
 
 /** The available directions for ordering a list of records. */
-export enum SortOrder {
+export enum ORDER_TYPE {
   /** Sort records in ascending order. */
-  Asc = 'asc',
+  ASC = 'ASC',
   /** Sort records in descending order. */
-  Desc = 'desc',
+  DESC = 'DESC',
 }
 /** A paginated list of Product items. */
 export declare type ProductPaginator = {

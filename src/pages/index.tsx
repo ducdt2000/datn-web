@@ -7,21 +7,16 @@ import {
   hasAccess,
   isAuthenticated,
 } from '@utils/auth-utils';
-import { SUPER_ADMIN } from '@utils/constants';
 import { ROUTES } from '@utils/routes';
 import AppLayout from '@components/layouts/app';
-const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
-const OwnerDashboard = dynamic(() => import('@components/dashboard/owner'));
+const BaseDashboard = dynamic(() => import('@components/dashboard/dashboard'));
 
 export default function Dashboard({
   userPermissions,
 }: {
   userPermissions: string[];
 }) {
-  if (userPermissions?.includes(SUPER_ADMIN)) {
-    return <AdminDashboard />;
-  }
-  return <OwnerDashboard />;
+  return <BaseDashboard />;
 }
 
 Dashboard.Layout = AppLayout;
