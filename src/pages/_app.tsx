@@ -19,14 +19,19 @@ import { ModalProvider } from '@components/ui/modal/modal.context';
 import DefaultSeo from '@components/ui/default-seo';
 import PrivateRoute from '@utils/private-route';
 import ManagedModal from '@components/ui/modal/managed-modal';
+import setting from '@data/settings/settings.json';
 
 const Noop: React.FC = ({ children }) => <>{children}</>;
 
 const AppSettings: React.FC = (props) => {
-  const { data, isLoading: loading, error } = useSettingsQuery();
-  if (loading) return <PageLoader />;
-  if (error) return <ErrorMessage message={error.message} />;
-  return <SettingsProvider initialValue={data?.options} {...props} />;
+  // const { data, isLoading: loading, error } = useSettingsQuery();
+  // if (loading) return <PageLoader />;
+  // if (error) return <ErrorMessage message={error.message} />;
+
+  const data = setting;
+
+  const result = <SettingsProvider initialValue={data?.options} {...props} />;
+  return result;
 };
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
@@ -35,8 +40,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     queryClientRef.current = new QueryClient();
   }
   const Layout = (Component as any).Layout || Noop;
-  const authProps = (Component as any).authenticate;
-
+  // const authProps = (Component as any).authenticate;
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps.dehydratedState}>
@@ -45,17 +49,18 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
             <ModalProvider>
               <>
                 <DefaultSeo />
-                {authProps ? (
-                  <PrivateRoute authProps={authProps}>
-                    <Layout {...pageProps}>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </PrivateRoute>
-                ) : (
+                {
+                  // authProps ? (
+                  //   <PrivateRoute authProps={authProps}>
+                  //     <Layout {...pageProps}>
+                  //       <Component {...pageProps} />
+                  //     </Layout>
+                  //   </PrivateRoute>
+                  // ) :
                   <Layout {...pageProps}>
                     <Component {...pageProps} />
                   </Layout>
-                )}
+                }
                 <ToastContainer autoClose={2000} theme="colored" />
                 <ManagedModal />
               </>

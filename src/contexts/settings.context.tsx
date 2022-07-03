@@ -30,7 +30,8 @@ export const SettingsProvider: React.FC<{ initialValue: any }> = ({
     }),
     [state]
   );
-  return <SettingsContext.Provider value={value} {...props} />;
+  const result = <SettingsContext.Provider value={value} {...props} />;
+  return result;
 };
 
 export const useSettings = () => {

@@ -5,7 +5,7 @@ import Avatar from '@components/common/avatar';
 import Link from '@components/ui/link';
 import { siteSettings } from '@settings/site.settings';
 import { useTranslation } from 'next-i18next';
-import { useMeQuery } from '@data/user/use-me.query';
+// import { useMeQuery } from '@data/user/use-me.query';
 
 export default function AuthorizedMenu() {
   // const { data } = useMeQuery();
@@ -16,11 +16,10 @@ export default function AuthorizedMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="flex items-center focus:outline-none">
         <Avatar
-          src=""
-          // src={
-          //   data?.profile?.avatar?.thumbnail ??
-          //   siteSettings?.avatar?.placeholder
-          // }
+          src={
+            //data?.profile?.avatar?.thumbnail ??
+            siteSettings?.avatar?.placeholder
+          }
           alt="avatar"
         />
       </Menu.Button>

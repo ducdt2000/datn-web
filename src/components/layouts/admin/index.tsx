@@ -1,9 +1,9 @@
-import Navbar from "@components/layouts/navigation/top-navbar";
-import { Fragment } from "react";
-import MobileNavigation from "@components/layouts/navigation/mobile-navigation";
-import { siteSettings } from "@settings/site.settings";
-import { useTranslation } from "next-i18next";
-import SidebarItem from "@components/layouts/navigation/sidebar-item";
+import Navbar from '@components/layouts/navigation/top-navbar';
+import { Fragment } from 'react';
+import MobileNavigation from '@components/layouts/navigation/mobile-navigation';
+import { siteSettings } from '@settings/site.settings';
+import { useTranslation } from 'next-i18next';
+import SidebarItem from '@components/layouts/navigation/sidebar-item';
 
 const AdminLayout: React.FC = ({ children }) => {
   const { t } = useTranslation();

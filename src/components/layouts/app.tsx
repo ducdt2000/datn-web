@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
-import AdminLayout from './admin';
+
+const AdminLayout = dynamic(() => import('@components/layouts/admin'));
 
 export default function AppLayout({
   userPermissions,
@@ -7,5 +8,5 @@ export default function AppLayout({
 }: {
   userPermissions: string[];
 }) {
-  return AdminLayout;
+  return <AdminLayout {...props} />;
 }

@@ -1,7 +1,8 @@
-import Settings from "@repositories/settings";
-import { useQuery } from "react-query";
-import { Settings as TSettings } from "@ts-types/generated";
-import { API_ENDPOINTS } from "@utils/api/endpoints";
+import Settings from '@repositories/settings';
+import { useQuery } from 'react-query';
+import { Settings as TSettings } from '@ts-types/generated';
+import { API_ENDPOINTS } from '@utils/api/endpoints';
+import setting from './settings.json';
 
 export const fetchSettings = async () => {
   const { data } = await Settings.all(API_ENDPOINTS.SETTINGS);
@@ -9,7 +10,5 @@ export const fetchSettings = async () => {
 };
 
 export const useSettingsQuery = () => {
-  return useQuery<TSettings, Error>([API_ENDPOINTS.SETTINGS], () =>
-    fetchSettings()
-  );
+  return useQuery<any, Error>([API_ENDPOINTS.SETTINGS], () => setting);
 };
