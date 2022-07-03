@@ -6,7 +6,7 @@ export const API_ENDPOINTS = {
   ORDER_STATUS: 'order-status',
   ORDERS: 'orders',
   USERS: 'users',
-  REGISTER: 'register',
+  REGISTER: 'auth/register',
   PRODUCTS: 'products',
   POPULAR_PRODUCTS: 'popular-products',
   COUPONS: 'coupons',

@@ -293,5 +293,16 @@
   "promotional-slider-help-text": "Upload Promotional Sliders",
   "error-product-card-required": "Please select a product card",
   "group-settings": "Select group related settings",
-  "group-settings-help-text": "Please make sure you selected the necessary settings"
+  "group-settings-help-text": "Please make sure you selected the necessary settings",
+  "form:error-fullname-required": "Fullname is required",
+  "form:error-username-required":"Username is required",
+  "form:error-password-required":"Password is required",
+  "form:error-email-required": "Email is required",
+  "form:error-phone-required":"Phone is required",
+  "form:error-address-required":"Address is required",
+  "form:error-city-required": "City is required",
+  "form:error-district-required":"District is required",
+  "form:error-gender-required": "Gender is required",
+  "form:error-birthday-required": "Birthday is required",
+  "form: error-role-required": "Role is required"
 }
