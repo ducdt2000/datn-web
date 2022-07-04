@@ -3,8 +3,8 @@ import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { ROUTES } from '@utils/routes';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +13,18 @@ import Link from '@components/ui/link';
 import { allowedRoles, hasAccess, setAuthCredentials } from '@utils/auth-utils';
 import { useRegisterMutation } from '@data/user/use-register.mutation';
 import { GENDER, ROLE } from '@ts-types/custom.types';
+import { DatePicker } from '@components/ui/date-picker';
+import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
 // import * as yupphone from 'yup-phone';
+import ValidationError from '@components/ui/form-validation-error';
+import useLocationForm from '@data/address/use-address-form';
+
+const genderOptions = [
+  { name: 'option:male-name', value: GENDER.MALE },
+  { name: 'option:female-name', value: GENDER.FEMALE },
+  { name: 'option:other-name', value: GENDER.OTHER },
+];
 
 type FormValues = {
   fullname: string;
@@ -64,9 +75,19 @@ const RegistrationForm = () => {
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
 
   const {
+    state: locationState,
+    onCitySelect,
+    onDistrictSelect,
+  } = useLocationForm();
+
+  const { cityOptions, districtOptions, selectedCity, selectedDistrict } =
+    locationState;
+
+  const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
     setError,
   } = useForm<FormValues>({
     resolver: yupResolver(registrationFormSchema),
@@ -147,13 +168,29 @@ const RegistrationForm = () => {
           variant="outline"
           className="mb-4"
         />
-        <Input
-          label={t('form:input-label-city')}
-          {...register('city')}
-          variant="outline"
-          className="mb-4"
-          error={t(errors?.city?.message!)}
-        />
+        <div className="mb-4">
+          <Label>{t('form:input-label-city')}</Label>
+          <SelectInput
+            name="city"
+            control={control}
+            onChange={(option: any) => onCitySelect(option)}
+            getOptionLabel={(option: any) => t(option.name)}
+            getOptionVale={(option: any) => option.value}
+            options={cityOptions}
+          />
+          <ValidationError message={t(errors?.city?.message!)} />
+        </div>
+        <div className="mb-4">
+          <Label>{t('form:input-label-district')}</Label>
+          <SelectInput
+            name="district"
+            control={control}
+            getOptionLabel={(option: any) => t(option.name)}
+            getOptionVale={(option: any) => option.value}
+            options={districtOptions}
+          />
+          <ValidationError message={t(errors?.city?.message!)} />
+        </div>
         <Input
           label={t('form:input-label-district')}
           {...register('district')}
@@ -168,13 +205,35 @@ const RegistrationForm = () => {
           className="mb-4"
           error={t(errors?.address?.message!)}
         />
-        <Input
-          label={t('form:input-label-gender')}
-          {...register('gender')}
-          variant="outline"
-          className="mb-4"
-          error={t(errors?.gender?.message!)}
-        />
+        <div className="mb-4">
+          <Label>{t('form:input-label-gender')}</Label>
+          <SelectInput
+            name="gender"
+            control={control}
+            getOptionLabel={(option: any) => t(option.name)}
+            getOptionVale={(option: any) => option.value}
+            options={genderOptions}
+          />
+          <ValidationError message={t(errors?.gender?.message!)} />
+        </div>
+        <div className="mb-4">
+          <Label>{t('form:input-label-birthday')}</Label>
+          <Controller
+            control={control}
+            {...register('birthday')}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <DatePicker
+                dateFormat="dd/MM/yyyy"
+                onChange={onChange}
+                onBlur={onBlur}
+                selected={value}
+                selectsStart
+                className="border border-border-base"
+                placeholderText={new Date().toLocaleDateString()}
+              />
+            )}
+          />
+        </div>
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('form:text-register')}
         </Button>
