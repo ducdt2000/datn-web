@@ -4737,6 +4737,11 @@
   "resolved" "https://registry.npmjs.org/property-expr/-/property-expr-2.0.5.tgz"
   "version" "2.0.5"
 
+"ps@^1.0.0":
+  "integrity" "sha512-H4X+wwtupakW7DvEkswKuYjfGO83cVkyQUoDouys8bFrFFBTGPq9NxNaM+1yfX8Tn+7Vf6zcq2IjRaNr2nF+RA=="
+  "resolved" "https://registry.npmjs.org/ps/-/ps-1.0.0.tgz"
+  "version" "1.0.0"
+
 "public-encrypt@^4.0.0":
   "integrity" "sha512-zVpa8oKZSz5bTMTFClc1fQOnyyEzpl5ozpi1B5YcvBrdohMjH2rfsBtyXcuNuwjsDIXmBYlF2N5FlJYhR29t8Q=="
   "resolved" "https://registry.npmjs.org/public-encrypt/-/public-encrypt-4.0.3.tgz"

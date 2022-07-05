@@ -3,7 +3,7 @@ import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ROUTES } from '@utils/routes';
 import { useTranslation } from 'next-i18next';
@@ -18,12 +18,16 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 // import * as yupphone from 'yup-phone';
 import ValidationError from '@components/ui/form-validation-error';
-import useLocationForm from '@data/address/use-address-form';
-
 const genderOptions = [
-  { name: 'option:male-name', value: GENDER.MALE },
-  { name: 'option:female-name', value: GENDER.FEMALE },
-  { name: 'option:other-name', value: GENDER.OTHER },
+  { value: +GENDER.MALE, name: 'option:male-name' },
+  { value: +GENDER.FEMALE, name: 'option:female-name' },
+  { value: +GENDER.OTHER, name: 'option:other-name' },
+];
+
+const roleOptions = [
+  { value: ROLE.USER, name: 'option:user-name' },
+  { value: ROLE.STAFF, name: 'option:staff-name' },
+  { value: ROLE.ADMIN, name: 'option:admin-name' },
 ];
 
 type FormValues = {
@@ -55,9 +59,9 @@ const registrationFormSchema = yup.object().shape({
   address: yup.string().required('form:error-address-required'),
   city: yup.string().required('form:error-city-required'),
   district: yup.string().required('form:error-district-required'),
-  gender: yup.number().required('form:error-gender-required'),
+  gender: yup.mixed().required('form:error-gender-required'),
   birthday: yup.date().required('form:error-birthday-required'),
-  role: yup.string().required('form: error-role-required').default(ROLE.USER),
+  role: yup.mixed().required('form: error-role-required').default(ROLE.USER),
   inviteCode: yup.string().notRequired(),
 });
 
@@ -74,14 +78,14 @@ const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
 
-  const {
-    state: locationState,
-    onCitySelect,
-    onDistrictSelect,
-  } = useLocationForm();
+  // const {
+  //   state: locationState,
+  //   onCitySelect,
+  //   onDistrictSelect,
+  // } = useLocationForm(true);
 
-  const { cityOptions, districtOptions, selectedCity, selectedDistrict } =
-    locationState;
+  // const { cityOptions, districtOptions, selectedCity, selectedDistrict } =
+  //   locationState;
 
   const {
     register,
@@ -168,10 +172,28 @@ const RegistrationForm = () => {
           variant="outline"
           className="mb-4"
         />
+        <Input
+          label={t('form:input-label-city')}
+          {...register('city')}
+          variant="outline"
+          className="mb-4"
+          error={t(errors?.city?.message!)}
+        />
+        <Input
+          label={t('form:input-label-disctrict')}
+          {...register('district')}
+          variant="outline"
+          className="mb-4"
+          error={t(errors?.district?.message!)}
+        />
+
+        {/*
+        //TODO: react hook
         <div className="mb-4">
           <Label>{t('form:input-label-city')}</Label>
           <SelectInput
             name="city"
+            defaultValue={selectedCity}
             control={control}
             onChange={(option: any) => onCitySelect(option)}
             getOptionLabel={(option: any) => t(option.name)}
@@ -185,19 +207,15 @@ const RegistrationForm = () => {
           <SelectInput
             name="district"
             control={control}
+            onChange={(options: any) => onDistrictSelect(options)}
+            defaultValue={selectedDistrict}
             getOptionLabel={(option: any) => t(option.name)}
             getOptionVale={(option: any) => option.value}
             options={districtOptions}
           />
-          <ValidationError message={t(errors?.city?.message!)} />
+          <ValidationError message={t(errors?.district?.message!)} />
         </div>
-        <Input
-          label={t('form:input-label-district')}
-          {...register('district')}
-          variant="outline"
-          className="mb-4"
-          error={t(errors?.district?.message!)}
-        />
+         */}
         <Input
           label={t('form:input-label-address')}
           {...register('address')}
@@ -210,11 +228,25 @@ const RegistrationForm = () => {
           <SelectInput
             name="gender"
             control={control}
-            getOptionLabel={(option: any) => t(option.name)}
-            getOptionVale={(option: any) => option.value}
+            value={(option: any) => option.value}
+            getOptionLabel={(option: any) => option.name}
+            onChange={(value: any) => {
+              console.log('thisisvalue', value);
+            }}
             options={genderOptions}
           />
           <ValidationError message={t(errors?.gender?.message!)} />
+        </div>
+        <div className="mb-4">
+          <Label>{t('form:input-label-role')}</Label>
+          <SelectInput
+            name="role"
+            control={control}
+            getOptionValue={(option: any) => option.value}
+            getOptionLabel={(option: any) => option.name}
+            options={roleOptions}
+          />
+          <ValidationError message={t(errors?.role?.message!)} />
         </div>
         <div className="mb-4">
           <Label>{t('form:input-label-birthday')}</Label>

@@ -19,6 +19,9 @@
     "isolatedModules": true,
     "downlevelIteration": true,
     "jsx": "preserve",
+    "typeRoots": [
+      "./node_module/@types"
+    ],
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
