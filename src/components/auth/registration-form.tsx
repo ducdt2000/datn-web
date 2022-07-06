@@ -10,14 +10,22 @@ import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Link from '@components/ui/link';
-import { allowedRoles, hasAccess, setAuthCredentials } from '@utils/auth-utils';
+import {
+  allowedRoles,
+  checkRoleAccess,
+  hasAccess,
+  saveAuthCredentials,
+  setAuthCredentials,
+} from '@utils/auth-utils';
 import { useRegisterMutation } from '@data/user/use-register.mutation';
 import { GENDER, ROLE } from '@ts-types/custom.types';
 import { DatePicker } from '@components/ui/date-picker';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
+import moment from 'moment';
 // import * as yupphone from 'yup-phone';
 import ValidationError from '@components/ui/form-validation-error';
+import { useLoginMutation } from '@data/user/use-login.mutaion';
 const genderOptions = [
   { value: +GENDER.MALE, name: 'option:male-name' },
   { value: +GENDER.FEMALE, name: 'option:female-name' },
@@ -65,7 +73,7 @@ const registrationFormSchema = yup.object().shape({
   inviteCode: yup.string().notRequired(),
 });
 
-// const registrationFormSchema = yup.object().shape({
+// const registrationFormScheBadRequestExceptionma = yup.object().shape({
 //   name: yup.string().required('form:error-name-required'),
 //   email: yup
 //     .string()
@@ -77,6 +85,7 @@ const registrationFormSchema = yup.object().shape({
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
+  const { mutate: login, isLoading: loginLoading } = useLoginMutation();
 
   // const {
   //   state: locationState,
@@ -97,6 +106,7 @@ const RegistrationForm = () => {
     resolver: yupResolver(registrationFormSchema),
     defaultValues: {
       role: ROLE.USER,
+      birthday: moment().toDate(),
     },
   });
   const router = useRouter();
@@ -107,28 +117,45 @@ const RegistrationForm = () => {
       {
         variables: input,
       },
-
       {
-        onSuccess: ({ data }) => {
-          if (data?.token) {
-            if (hasAccess(allowedRoles, data?.permissions)) {
-              setAuthCredentials(data?.token, data?.permissions);
-              router.push(ROUTES.DASHBOARD);
-              return;
+        onSuccess: () => {
+          const loginInput = {
+            account: input.username,
+            password: input.password,
+          };
+
+          login(
+            { variables: loginInput },
+            {
+              onSuccess: ({ data: loginData }) => {
+                console.log('thisislogin', loginData.data);
+                if (loginData?.data) {
+                  saveAuthCredentials(
+                    loginData?.data?.token,
+                    loginData?.data?.detail.role
+                  );
+                  router.push(ROUTES.DASHBOARD);
+                  return;
+                } else {
+                  setErrorMessage('form:error-credential-wrong');
+                }
+              },
+              onError: (err: any) => {
+                setErrorMessage(err);
+              },
             }
-            setErrorMessage('form:error-enough-permission');
-          } else {
-            setErrorMessage('form:error-credential-wrong');
-          }
+          );
         },
-        onError: (error: any) => {
-          Object.keys(error?.response?.data).forEach((field: any) => {
-            setError(field, {
-              type: 'manual',
-              message: error?.response?.data[field],
-            });
-          });
-        },
+        // onError: (error: any) => {
+        //   console.log(error);
+
+        //   Object.keys(error?.response?.data).forEach((field: any) => {
+        //     setError(field, {
+        //       type: 'manual',
+        //       message: error?.response?.data[field],
+        //     });
+        //   });
+        // },
       }
     );
   }
@@ -228,11 +255,8 @@ const RegistrationForm = () => {
           <SelectInput
             name="gender"
             control={control}
-            value={(option: any) => option.value}
             getOptionLabel={(option: any) => option.name}
-            onChange={(value: any) => {
-              console.log('thisisvalue', value);
-            }}
+            getOptionValue={(option: any) => option.value}
             options={genderOptions}
           />
           <ValidationError message={t(errors?.gender?.message!)} />
@@ -242,8 +266,8 @@ const RegistrationForm = () => {
           <SelectInput
             name="role"
             control={control}
-            getOptionValue={(option: any) => option.value}
             getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.value}
             options={roleOptions}
           />
           <ValidationError message={t(errors?.role?.message!)} />
@@ -258,13 +282,14 @@ const RegistrationForm = () => {
                 dateFormat="dd/MM/yyyy"
                 onChange={onChange}
                 onBlur={onBlur}
-                selected={value}
+                selected={value ?? new Date()}
                 selectsStart
                 className="border border-border-base"
                 placeholderText={new Date().toLocaleDateString()}
               />
             )}
           />
+          <ValidationError message={t(errors?.birthday?.message!)} />
         </div>
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('form:text-register')}

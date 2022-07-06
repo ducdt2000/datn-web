@@ -611,7 +611,7 @@ export type SettingsOptions = {
   shippingClass?: Maybe<Scalars['String']>;
 };
 export declare type LoginInput = {
-  email: Scalars['String'];
+  account: Scalars['String'];
   password: Scalars['String'];
 };
 export declare type RegisterInput = {

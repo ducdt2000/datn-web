@@ -15,8 +15,16 @@ export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
 export const adminOnly = [SUPER_ADMIN];
 export const ownerOnly = [STORE_OWNER];
 
-export function setAuthCredentials(token: string, permissions: any) {
-  Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions }));
+export function saveAuthCredentials(token: string, role: string) {
+  Cookie.set(AUTH_CRED, JSON.stringify({ token, role }));
+}
+
+export function setAuthCredentials(
+  token: string,
+  permissions: any,
+  role: string
+) {
+  Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions, role }));
 }
 
 export function getAuthCredentials(context?: any): {
@@ -37,6 +45,13 @@ export function getAuthCredentials(context?: any): {
 
 export function parseSSRCookie(context: any) {
   return SSRCookie.parse(context.req.headers.cookie ?? '');
+}
+
+export function checkRoleAccess(_allowedRoles: string[], _role: string) {
+  if (_role) {
+    return _allowedRoles.includes(_role);
+  }
+  return false;
 }
 
 export function hasAccess(

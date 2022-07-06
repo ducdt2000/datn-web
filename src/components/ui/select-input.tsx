@@ -16,6 +16,9 @@ const SelectInput = ({
   rules,
   getOptionLabel,
   getOptionValue,
+  value,
+  onChange,
+  onBlur,
   isMulti,
   isClearable,
   isLoading,
@@ -27,9 +30,12 @@ const SelectInput = ({
       name={name}
       rules={rules}
       {...rest}
-      render={({ field }) => (
+      render={({ field: { value, onChange, onBlur, ref } }) => (
         <Select
-          {...field}
+          inputRef={ref}
+          value={options.find((o: any) => o.value === value)}
+          onChange={(val: any) => onChange(val.value)}
+          onBlur={onBlur}
           getOptionLabel={getOptionLabel}
           getOptionValue={getOptionValue}
           isMulti={isMulti}
