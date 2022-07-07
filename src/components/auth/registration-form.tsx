@@ -10,13 +10,7 @@ import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Link from '@components/ui/link';
-import {
-  allowedRoles,
-  checkRoleAccess,
-  hasAccess,
-  saveAuthCredentials,
-  setAuthCredentials,
-} from '@utils/auth-utils';
+import { saveAuthCredentials } from '@utils/auth-utils';
 import { useRegisterMutation } from '@data/user/use-register.mutation';
 import { GENDER, ROLE } from '@ts-types/custom.types';
 import { DatePicker } from '@components/ui/date-picker';
