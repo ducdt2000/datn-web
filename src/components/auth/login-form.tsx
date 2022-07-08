@@ -56,7 +56,6 @@ const LoginForm = () => {
       },
       {
         onSuccess: ({ data: { data } }) => {
-          console.log('thisisdata', data);
           if (data?.token) {
             if (checkRoleAccess(allowedRoles, data?.detail?.role)) {
               saveAuthCredentials(data?.token, data?.detail?.role);

@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   USERS: 'users',
   REGISTER: 'auth/register',
   LOGIN: 'auth/login',
+  PRODUCT_TYPES: 'product-types',
   PRODUCTS: 'products',
   POPULAR_PRODUCTS: 'popular-products',
   COUPONS: 'coupons',

@@ -514,6 +514,27 @@ export declare type CreateOrder = {
   billing_address?: Maybe<UserAddressInput>;
   shipping_address?: Maybe<UserAddressInput>;
 };
+
+export declare type ProductTypePaginator = {
+  data: Array<ProductType>;
+};
+
+export declare type CreateBrand = {
+  name: Scalars['String'];
+  type: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export declare type CreateProductType = {
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type UpdateProductType = {
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
+
 export declare type CardInput = {
   number: Scalars['String'];
   expiryMonth: Scalars['String'];
@@ -715,12 +736,27 @@ export type CreateTypeInput = {
   banner_text?: Maybe<Scalars['String']>;
 };
 
-export enum ProductType {
-  /** Simple */
-  Simple = 'simple',
-  /** Variable */
-  Variable = 'variable',
-}
+export declare type BaseOutput = {
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
+};
+
+export declare type ProductType = BaseOutput & {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type CreateProductTypeInput = {
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type UpdateProductTypeInput = {
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
 
 export declare type ApproveShopInput = {
   id: Scalars['ID'];

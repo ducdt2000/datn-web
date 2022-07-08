@@ -19,7 +19,7 @@ import SelectInput from '@components/ui/select-input';
 import moment from 'moment';
 // import * as yupphone from 'yup-phone';
 import ValidationError from '@components/ui/form-validation-error';
-import { useLoginMutation } from '@data/user/use-login.mutaion';
+import { useLoginMutation } from '@data/user/use-login.mutation';
 const genderOptions = [
   { value: +GENDER.MALE, name: 'option:male-name' },
   { value: +GENDER.FEMALE, name: 'option:female-name' },
@@ -122,7 +122,6 @@ const RegistrationForm = () => {
             { variables: loginInput },
             {
               onSuccess: ({ data: loginData }) => {
-                console.log('thisislogin', loginData.data);
                 if (loginData?.data) {
                   saveAuthCredentials(
                     loginData?.data?.token,
