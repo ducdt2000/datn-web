@@ -1,5 +1,6 @@
 export const API_ENDPOINTS = {
   ATTACHMENTS: 'attachments',
+  BRANDS: 'brands',
   ANALYTICS: 'analytics',
   ATTRIBUTES: 'attributes',
   ATTRIBUTE_VALUES: 'attribute-values',

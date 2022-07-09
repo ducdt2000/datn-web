@@ -95,7 +95,7 @@
   "active-from-date-required": "Active from date is required",
   "expire-date-required": "Expire date is required",
   "delete-item": "Delete Item",
-  "delete-item-confirm": "Are you sure, you want to delete?",
+  "delete-item-confirm": "Are you sure, you want to delete ",
   "button-cancel": "Cancel",
   "button-delete": "Delete",
   "block-customer": "Block Customer",

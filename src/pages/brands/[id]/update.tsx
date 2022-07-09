@@ -1,20 +1,21 @@
 import Layout from '@components/layouts/admin';
 import { useRouter } from 'next/router';
-import ProductTypeForm from '@components/product-type/product-type-form';
+import BrandForm from '@components/brand/brand-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { useProductTypeQuery } from '@data/product-types/product-type.query';
+import { useBrandQuery } from '@data/brands/brand.query';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function UpdateProductTypePage() {
+export default function UpdateBrandPage() {
   const { query } = useRouter();
   const { t } = useTranslation();
+
   const {
     data,
     isLoading: loading,
     error,
-  } = useProductTypeQuery(query?.id as string);
+  } = useBrandQuery(query?.id as string);
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -26,14 +27,14 @@ export default function UpdateProductTypePage() {
         </h1>
         <h2 className="text-lg font-light text-heading">
           {' '}
-          {`: ${data?.name} - ${data?.code}`}
+          {`: ${data?.name}`}
         </h2>
       </div>
-      <ProductTypeForm initialValues={data} />
+      <BrandForm initialValues={data} />
     </>
   );
 }
-UpdateProductTypePage.Layout = Layout;
+UpdateBrandPage.Layout = Layout;
 
 export const getServerSideProps = async ({ locale }: any) => ({
   props: {

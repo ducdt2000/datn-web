@@ -18,7 +18,7 @@ const useProductTypesQuery = (options: any = {}) => {
     fetchProductTypes,
     {
       ...options,
-      //keepPreviousData: true,
+      keepPreviousData: true,
     }
   );
 };

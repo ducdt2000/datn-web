@@ -47,7 +47,7 @@ export const siteSettings = {
         icon: 'CategoriesIcon',
       },
       {
-        href: ROUTES.BRAND,
+        href: ROUTES.BRANDS,
         label: 'sidebar-nav-item-brands',
         icon: 'CategoriesIcon',
       },

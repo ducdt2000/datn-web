@@ -1,24 +1,30 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ProductType } from '@ts-types/generated';
+import { Brand } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { productTypeValidationSchema } from './product-type-validation-schema';
-import { useCreateProductTypeMutation } from '@data/product-types/use-create-product-type.mutation';
-import { useUpdateProductTypeMutation } from '@data/product-types/use-update-product-type.mutation';
+import { brandValidationSchema } from './brand-validation-schema';
+import { useCreateBrandMutation } from '@data/brands/use-create-brand.mutation';
+import { useUpdateBrandMutation } from '@data/brands/use-update-brand.mutation';
 import Input from '@components/ui/input';
 import Button from '@components/ui/button';
+import SelectInput from '@components/ui/select-input';
+import Label from '@components/ui/label';
+import { Asterisk } from '@components/common/asterisk';
 
 type FormValues = {
   name?: string | null;
-  code?: string | null;
+  slug?: string | null;
+  type?: string | null;
 };
 
 type IProps = {
-  initialValues?: ProductType | null;
+  initialValues?: Brand | null;
 };
 
-export default function ProductTypeForm({ initialValues }: IProps) {
+const brandTypeOptions = [{ value: 'foreign' }, { value: 'local' }];
+
+export default function BrandForm({ initialValues }: IProps) {
   const router = useRouter();
 
   const { t } = useTranslation();
@@ -26,33 +32,32 @@ export default function ProductTypeForm({ initialValues }: IProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     shouldUnregister: true,
-    resolver: yupResolver(productTypeValidationSchema),
+    resolver: yupResolver(brandValidationSchema),
     defaultValues: {
       ...initialValues,
     },
   });
+  const { mutate: updateBrand, isLoading: updating } = useUpdateBrandMutation();
 
-  const { mutate: createProductType, isLoading: creating } =
-    useCreateProductTypeMutation();
-
-  const { mutate: updateProductType, isLoading: updating } =
-    useUpdateProductTypeMutation();
+  const { mutate: createBrand, isLoading: creating } = useCreateBrandMutation();
 
   const onSubmit = async (values: FormValues) => {
     const input = {
       name: values.name!,
-      code: values.code!,
+      slug: values.slug!,
+      type: values.type!,
     };
 
     if (!initialValues) {
-      createProductType({
+      createBrand({
         variables: { input },
       });
     } else {
-      updateProductType({ variables: { input, id: initialValues.id } });
+      updateBrand({ variables: { input, id: initialValues.id } });
     }
   };
 
@@ -69,11 +74,21 @@ export default function ProductTypeForm({ initialValues }: IProps) {
         />
         <Input
           label={t('form:input-label-code')}
-          {...register('code')}
-          error={t(errors.code?.message!)}
+          {...register('slug')}
+          error={t(errors.slug?.message!)}
           variant="outline"
           className="mb-5"
           required={true}
+        />
+        <Label>
+          {t('form:input-label-type')}
+          <Asterisk />
+        </Label>
+        <SelectInput
+          name="type"
+          control={control}
+          options={brandTypeOptions}
+          getOptionLabel={(option: any) => option.value}
         />
       </div>
       <div className="mb-4 text-end">
@@ -90,8 +105,8 @@ export default function ProductTypeForm({ initialValues }: IProps) {
 
         <Button loading={creating || updating}>
           {initialValues
-            ? t('form:button-label-update-productType')
-            : t('form:button-label-add-productType')}
+            ? t('form:button-label-update-brand')
+            : t('form:button-label-add-brand')}
         </Button>
       </div>
     </form>

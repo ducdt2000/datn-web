@@ -1,17 +1,18 @@
 import ActionButtons from '@components/common/action-buttons';
+import { DateComponent } from '@components/common/date-component';
 import { Table } from '@components/ui/table';
-import { ProductType, ProductTypePaginator } from '@ts-types/generated';
+import { Brand, BrandPaginator } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 export type IProps = {
-  productTypes?: ProductTypePaginator;
-  onPagination: (current: number) => void;
+  brands?: BrandPaginator;
+  onPagination?: (current: number) => void;
 };
 
-const ProductTypeList = ({ productTypes }: IProps) => {
-  const { data } = productTypes! ?? [];
+const BrandList = ({ brands }: IProps) => {
+  const { data } = brands! ?? [];
 
   const router = useRouter();
 
@@ -25,16 +26,42 @@ const ProductTypeList = ({ productTypes }: IProps) => {
       dataIndex: 'name',
       key: 'name',
       align: alignLeft,
-      width: 200,
+      width: 100,
       ellipsis: true,
     },
     {
-      title: t('table:table-item-code'),
-      dataIndex: 'code',
-      key: 'code',
+      title: t('table:table-item-slug'),
+      dataIndex: 'slug',
+      key: 'slug',
       align: alignLeft,
-      width: 200,
+      width: 100,
       ellipsis: true,
+    },
+    {
+      title: t('table:table-item-type'),
+      dataIndex: 'type',
+      key: 'type',
+      align: alignLeft,
+      width: 100,
+      ellipsis: true,
+    },
+    {
+      title: t('table:table-item-createdAt'),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: alignLeft,
+      width: 100,
+      ellipsis: true,
+      render: (createdAt: Date) => <DateComponent date={createdAt} />,
+    },
+    {
+      title: t('table:table-item-updatedAt'),
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      align: alignLeft,
+      width: 100,
+      ellipsis: true,
+      render: (updatedAt: Date) => <DateComponent date={updatedAt} />,
     },
     {
       title: t('table:table-item-actions'),
@@ -46,7 +73,7 @@ const ProductTypeList = ({ productTypes }: IProps) => {
         <ActionButtons
           id={id}
           editUrl={`${router.asPath}/${id}/update`}
-          deleteModalView="DELETE_PRODUCT_TYPE"
+          deleteModalView="DELETE_BRAND"
         />
       ),
     },
@@ -68,4 +95,4 @@ const ProductTypeList = ({ productTypes }: IProps) => {
   );
 };
 
-export default ProductTypeList;
+export default BrandList;

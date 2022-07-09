@@ -1,5 +1,16 @@
 import { QueryKey } from 'react-query';
 
+export type BrandsQueryOptionsType = {
+  type?: string;
+  search?: string;
+  orderBy?: string;
+  orderType?: ORDER_TYPE;
+  createdFrom?: Date;
+  createdTo?: Date;
+  updatedFrom?: Date;
+  updatedTo?: Date;
+};
+
 export type CategoriesQueryOptionsType = {
   type?: string;
   text?: string;

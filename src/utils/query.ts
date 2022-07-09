@@ -1,10 +1,15 @@
-import { URLSearchParams } from 'url';
-
 export function createQueryPath(baseUrl: string, params: any) {
-  const searchParams = new URLSearchParams(baseUrl);
+  if (!params) {
+    return baseUrl;
+  }
+
+  const queryString = new URLSearchParams();
+
   Object.keys(params).forEach((key) => {
-    searchParams.append(key, params[key]);
+    if (params[key] !== undefined && params[key] !== null) {
+      queryString.append(key, params[key]);
+    }
   });
 
-  return searchParams.toString();
+  return `${baseUrl}?${queryString.toString()}`;
 }

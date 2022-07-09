@@ -1,7 +1,7 @@
 export const ROUTES = {
   DASHBOARD: '/',
   SHOPS: '/shops',
-  BRAND: '/brands',
+  BRANDS: '/brands',
   PRODUCT_TYPES: '/product-types',
   WAREHOUSE: '/warehouses',
   ADMIN_MY_SHOPS: '/my-shops',

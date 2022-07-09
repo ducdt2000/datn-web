@@ -519,10 +519,20 @@ export declare type ProductTypePaginator = {
   data: Array<ProductType>;
 };
 
+export declare type BrandPaginator = {
+  data: Array<Brand>;
+};
+
 export declare type CreateBrand = {
   name: Scalars['String'];
   type: Scalars['String'];
   slug: Scalars['String'];
+};
+
+export declare type UpdateBrand = {
+  name: Maybe<Scalars['String']>;
+  type: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
 };
 
 export declare type CreateProductType = {
@@ -746,6 +756,24 @@ export declare type ProductType = BaseOutput & {
   id: Scalars['ID'];
   name: Scalars['String'];
   code: Scalars['String'];
+};
+
+export declare type Brand = BaseOutput & {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export declare type CreateBrandInput = {
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export declare type UpdateBrandInput = {
+  name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export declare type CreateProductTypeInput = {

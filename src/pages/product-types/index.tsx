@@ -9,6 +9,10 @@ import ProductTypeList from '@components/product-type/product-type-list';
 import { useState } from 'react';
 import LinkButton from '@components/ui/link-button';
 import { ROUTES } from '@utils/routes';
+import { MoreIcon } from '@components/icons/more-icon';
+import EditIcon from '@components/icons/edit';
+import Link from '@components/ui/link';
+import { PlusIcon } from '@components/icons/plus-icon';
 
 export default function ProductTypesPage() {
   const { t } = useTranslation();
@@ -37,9 +41,7 @@ export default function ProductTypesPage() {
             href={`${ROUTES.PRODUCT_TYPES}/create`}
             className="h-12 md:ms-6 w-full md:w-auto"
           >
-            <span className="block md:hidden xl:block">
-              + {t('form:button-label-add-productTypes')}
-            </span>
+            <span className="block md:hidden xl:block">+</span>
             <span className="hidden md:block xl:hidden">
               + {t('form:button-label-add')}
             </span>
