@@ -95,7 +95,6 @@ const RegistrationForm = () => {
     handleSubmit,
     formState: { errors },
     control,
-    setError,
   } = useForm<FormValues>({
     resolver: yupResolver(registrationFormSchema),
     defaultValues: {

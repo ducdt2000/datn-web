@@ -92,16 +92,18 @@ export default function BrandsPage() {
         </div>
       </Card>
       <Card
-        className={cn('w-3/4 flex transition', {
+        className={cn('flex transition', {
           'h-auto visible': visible,
           'h-0 invisible': !visible,
         })}
       >
         <BrandFilter
           className="w-full md:mr-5"
-          onTypeFilter={({ value }: any) => {
-            setType(value);
-          }}
+          onTypeFilter={({ value }: any) => setType(value)}
+          onCreatedFrom={(value: any) => setCreatedFrom(value)}
+          onCreatedTo={(value: any) => setCreatedTo(value)}
+          onUpdatedFrom={(value: any) => setUpdatedFrom(value)}
+          onUpdatedTo={(value: any) => setUpdatedTo(value)}
         />
         {/* <SortForm
               className="w-full md:w-1/3 mt-5 md:mt-0"
