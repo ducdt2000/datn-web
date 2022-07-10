@@ -71,7 +71,7 @@ export default function BrandsPage() {
           className="text-accent text-base font-semibold flex items-center md:ms-5 mt-5 md:mt-0"
           onClick={toggleVisible}
         >
-          {t('common:text-filter')}{' '}
+          {t('commoluônn:text-filter')}{' '}
           {visible ? (
             <ArrowUp className="ms-2" />
           ) : (
@@ -125,7 +125,13 @@ export default function BrandsPage() {
               ]}
             /> */}
       </Card>
-      <BrandList brands={data?.brands} />
+      <BrandList
+        brands={data?.brands}
+        onOrder={(by: any, type: any) => {
+          setOrderBy(by);
+          setOrderType(type);
+        }}
+      />
     </>
   );
 }

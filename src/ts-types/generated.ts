@@ -567,48 +567,40 @@ export declare type OrderStatusUpdateInput = {
 
 export declare type CreateProduct = {
   name: Scalars['String'];
-  type_id: Scalars['String'];
-  price: Scalars['Float'];
-  sale_price?: Maybe<Scalars['Float']>;
-  quantity: Scalars['Int'];
-  unit: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  categories?: Maybe<Array<Scalars['ID']>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars['Boolean']>;
-  is_taxable?: Maybe<Scalars['Boolean']>;
-  sku?: Maybe<Scalars['String']>;
-  gallery?: Maybe<Array<Maybe<AttachmentInput>>>;
-  image?: Maybe<AttachmentInput>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['String']>;
+  productTypeId: Scalars['String'];
+  code: Scalars['String'];
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Scalars['String'];
+  price: Scalars['Int'];
+  imageLinks: Array<Scalars['String']>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Array<ProductProperty>;
 };
+
+export declare type UpdateProduct = {
+  name: Maybe<Scalars['String']>;
+  productTypeId: Maybe<Scalars['String']>;
+  code: Maybe<Scalars['String']>;
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Maybe<Scalars['String']>;
+  price: Maybe<Scalars['Int']>;
+  imageLinks: Maybe<Array<Scalars['String']>>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Maybe<Array<ProductProperty>>;
+};
+
+export declare type ProductProperty = {
+  name: Scalars['String'];
+  values: Array<Scalars['String']>;
+};
+
 export declare type AttributeProductPivot = {
   id: Scalars['ID'];
   price?: Maybe<Scalars['Float']>;
 };
-export declare type UpdateProduct = {
-  name: Scalars['String'];
-  type_id: Scalars['String'];
-  price: Scalars['Float'];
-  sale_price?: Maybe<Scalars['Float']>;
-  quantity: Scalars['Int'];
-  unit: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  categories?: Maybe<Array<Scalars['ID']>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars['Boolean']>;
-  is_taxable?: Maybe<Scalars['Boolean']>;
-  sku?: Maybe<Scalars['String']>;
-  gallery?: Maybe<Array<Maybe<AttachmentInput>>>;
-  image?: Maybe<AttachmentInput>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['String']>;
-};
+
 export declare type ProfileInput = {
   avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;

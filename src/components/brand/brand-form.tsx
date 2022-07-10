@@ -73,7 +73,7 @@ export default function BrandForm({ initialValues }: IProps) {
           required={true}
         />
         <Input
-          label={t('form:input-label-code')}
+          label={t('form:input-label-slug')}
           {...register('slug')}
           error={t(errors.slug?.message!)}
           variant="outline"
