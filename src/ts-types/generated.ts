@@ -773,6 +773,19 @@ export declare type CreateProductTypeInput = {
   code: Scalars['String'];
 };
 
+export declare type CreateProductInput = {
+  name: Scalars['String'];
+  productTypeId: Scalars['String'];
+  code: Scalars['String'];
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Scalars['String'];
+  price: Scalars['Int'];
+  imageLinks: Array<Scalars['String']>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Array<ProductProperty>;
+};
+
 export declare type UpdateProductTypeInput = {
   name?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
