@@ -1,24 +1,27 @@
 import ActionButtons from '@components/common/action-buttons';
 import { DateComponent } from '@components/common/date-component';
+import Pagination from '@components/ui/pagination';
 import { AntdTable } from '@components/ui/table';
-import { BrandPaginator } from '@ts-types/generated';
+import { ProductPaginator } from '@ts-types/generated';
+import { Image } from 'antd';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 export type IProps = {
-  brands?: BrandPaginator;
+  products?: ProductPaginator;
+  meta?: any;
   onPagination?: (current: number) => void;
   onOrder?: (by: string | undefined, type: string | undefined) => void;
 };
 
-const BrandList = ({ brands, onOrder }: IProps) => {
-  const { data } = brands! ?? [];
+const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
+  const { data } = products! ?? [];
 
   const router = useRouter();
 
   const { t } = useTranslation();
 
-  const handleOnChange = (pagination: any, filter: any, sorter: any) => {
+  const handleOnChange = (_pagination: any, _filter: any, sorter: any) => {
     if (onOrder) {
       onOrder(
         sorter.field,
@@ -34,9 +37,28 @@ const BrandList = ({ brands, onOrder }: IProps) => {
   return (
     <>
       <div className="rounded overflow-hidden shadow mb-6">
+        <div className="flex justify-end items-center">
+          <Pagination total={meta?.meta?.count} onChange={onPagination} />
+        </div>
         <AntdTable
           onChange={handleOnChange}
           columns={[
+            {
+              title: t('table:table-item-image'),
+              dataIndex: 'defaultImageLink',
+              key: 'defaultImageLink',
+              showSorterTooltip: false,
+              width: 74,
+              render: (imageLink) => (
+                <Image
+                  src={imageLink}
+                  width={42}
+                  height={42}
+                  alt={'image'}
+                  preview={false}
+                />
+              ),
+            },
             {
               title: t('table:table-item-name'),
               dataIndex: 'name',
@@ -48,6 +70,32 @@ const BrandList = ({ brands, onOrder }: IProps) => {
               ellipsis: true,
             },
             {
+              title: t('table:table-item-code'),
+              dataIndex: 'code',
+              key: 'code',
+              align: 'left',
+              width: 100,
+              ellipsis: true,
+            },
+            {
+              title: t('table:table-item-productType'),
+              dataIndex: 'productType',
+              key: 'productType',
+              align: 'left',
+              width: 100,
+              ellipsis: true,
+              render: (productType) => productType?.name,
+            },
+            {
+              title: t('table:table-item-brand'),
+              dataIndex: 'brand',
+              key: 'brand',
+              align: 'left',
+              width: 100,
+              ellipsis: true,
+              render: (brand) => brand?.name,
+            },
+            {
               title: t('table:table-item-slug'),
               dataIndex: 'slug',
               key: 'slug',
@@ -56,12 +104,38 @@ const BrandList = ({ brands, onOrder }: IProps) => {
               ellipsis: true,
             },
             {
-              title: t('table:table-item-type'),
-              dataIndex: 'type',
-              key: 'type',
-              align: 'left',
+              title: t('table:table-item-price'),
+              dataIndex: 'price',
+              key: 'price',
               sorter: true,
               showSorterTooltip: false,
+              align: 'left',
+              width: 100,
+              ellipsis: true,
+              render: (price) => {
+                var formater = new Intl.NumberFormat('it-IT', {
+                  style: 'currency',
+                  currency: 'VND',
+                });
+
+                return formater.format(price);
+              },
+            },
+            {
+              title: t('table:table-item-starPoint'),
+              dataIndex: 'starPoint',
+              key: 'startPoint',
+              sorter: true,
+              showSorterTooltip: false,
+              align: 'left',
+              width: 100,
+              ellipsis: true,
+            },
+            {
+              title: t('table:table-item-countInStock'),
+              dataIndex: 'countInStock',
+              key: 'countInStock',
+              align: 'left',
               width: 100,
               ellipsis: true,
             },
@@ -113,4 +187,4 @@ const BrandList = ({ brands, onOrder }: IProps) => {
   );
 };
 
-export default BrandList;
+export default ProductList;

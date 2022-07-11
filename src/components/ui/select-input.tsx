@@ -33,7 +33,7 @@ const SelectInput = ({
       render={({ field: { value, onChange, onBlur, ref } }) => (
         <Select
           inputRef={ref}
-          value={options.find((o: any) => o.value === value)}
+          value={options?.find((o: any) => o.value === value)}
           onChange={(val: any) => onChange(val.value)}
           onBlur={onBlur}
           getOptionLabel={getOptionLabel}

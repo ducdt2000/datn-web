@@ -11,23 +11,21 @@ const fetchProducts = async ({ queryKey }: QueryParamsType) => {
   const [_key, params] = queryKey;
 
   const url = createQueryPath(API_ENDPOINTS.PRODUCTS, params);
-
   const {
     data: { data, ...rest },
   } = await ProductRepository.all(url);
 
-  return { products: { data } };
+  return { products: { data }, meta: rest };
 };
 
 const useProductsQuery = (
   params: ProductsQueryOptionsType,
   options: any = {}
-) => {
-  return useQuery<any, Error>([API_ENDPOINTS.PRODUCTS, params], fetchProducts, {
+) =>
+  useQuery<any, Error>([API_ENDPOINTS.PRODUCTS, params], fetchProducts, {
     ...options,
     keepPreviousData: true,
   });
-};
 
 const fetchProduct = async (id: string) => {
   const {

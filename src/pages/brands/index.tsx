@@ -71,7 +71,7 @@ export default function BrandsPage() {
           className="text-accent text-base font-semibold flex items-center md:ms-5 mt-5 md:mt-0"
           onClick={toggleVisible}
         >
-          {t('commoluônn:text-filter')}{' '}
+          {t('common:text-filter')}
           {visible ? (
             <ArrowUp className="ms-2" />
           ) : (
@@ -105,25 +105,6 @@ export default function BrandsPage() {
           onUpdatedFrom={(value: any) => setUpdatedFrom(value)}
           onUpdatedTo={(value: any) => setUpdatedTo(value)}
         />
-        {/* <SortForm
-              className="w-full md:w-1/3 mt-5 md:mt-0"
-              onSortChange={({ value }: any) => {
-                setColumn(value);
-              }}
-              onOrderChange={({ value }: { value: string }) => {
-                setOrder(value);
-              }}
-              options={[
-                { value: 'name', label: 'Name' },
-                { value: 'price', label: 'Price' },
-                { value: 'max_price', label: 'Max Price' },
-                { value: 'mix_price', label: 'Min Price' },
-                { value: 'sale_price', label: 'Sale Price' },
-                { value: 'quantity', label: 'Quantity' },
-                { value: 'created_at', label: 'Created At' },
-                { value: 'updated_at', label: 'Updated At' },
-              ]}
-            /> */}
       </Card>
       <BrandList
         brands={data?.brands}

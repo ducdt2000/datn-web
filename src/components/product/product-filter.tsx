@@ -2,39 +2,40 @@ import { useTranslation } from 'next-i18next';
 import cn from 'classnames';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
+import { useBrandsQuery } from '@data/brands/brand.query';
+import { useProductTypesQuery } from '@data/product-types/product-type.query';
 import { DatePicker } from '@components/ui/date-picker';
 import moment from 'moment';
 import { useState } from 'react';
-
-const brandTypeOptions = [
-  { value: 'foreign' },
-  { value: 'local' },
-  { value: undefined },
-];
-
 type Props = {
-  onTypeFilter: Function;
+  onBrandIdFilter: Function;
+  onBrandTypeFilter: Function;
+  onProductTypeIdFilter: Function;
   onCreatedFrom: Function;
   onCreatedTo: Function;
-  onUpdatedFrom: Function;
-  onUpdatedTo: Function;
   className?: string;
 };
 
-export default function BrandFilter({
-  onTypeFilter,
+const brandTypeOptions = [{ value: 'foreign' }, { value: 'local' }];
+
+export default function ProductFilter({
   onCreatedFrom,
   onCreatedTo,
-  onUpdatedFrom,
-  onUpdatedTo,
   className,
+  onBrandIdFilter,
+  onBrandTypeFilter,
+  onProductTypeIdFilter,
 }: Props) {
   const { t } = useTranslation();
 
   const [createdFrom, setCreatedFrom] = useState();
   const [createdTo, setCreatedTo] = useState();
-  const [updatedFrom, setUpdatedFrom] = useState();
-  const [updatedTo, setUpdatedTo] = useState();
+
+  const { data: dataBrands, isLoading: loadingBrands } = useBrandsQuery({});
+
+  const { data: dataProductTypes, isLoading: loadingProductTypes } =
+    useProductTypesQuery({});
+
   return (
     <div
       className={cn(
@@ -43,12 +44,43 @@ export default function BrandFilter({
       )}
     >
       <div className="w-1/6">
+        <Label>{t('form:input-label-brand')}</Label>
+        <Select
+          onChange={onBrandIdFilter}
+          options={dataBrands?.brands?.data?.map((brand: any) => ({
+            value: brand.id,
+            name: brand.name,
+          }))}
+          isClearable={true}
+          getOptionLabel={(option: any) => option.name}
+          isLoading={loadingBrands}
+        />
+      </div>
+      <div className="w-1/6">
+        <Label>{t('form:input-label-productType')}</Label>
+        <Select
+          isClearable={true}
+          onChange={onProductTypeIdFilter}
+          options={dataProductTypes?.productTypes?.data?.map(
+            (productType: any) => {
+              return {
+                value: productType.id,
+                name: productType.name,
+              };
+            }
+          )}
+          getOptionLabel={(option: any) => option.name}
+          isLoading={loadingProductTypes}
+        />
+      </div>
+      <div className="w-1/6">
         <Label>{t('common:filter-by-type')}</Label>
         <Select
+          isClearable={true}
+          onChange={onBrandTypeFilter}
           options={brandTypeOptions}
           getOptionLabel={(option: any) => option.value}
           placeholder={t('common:filter-by-type-placeholder')}
-          onChange={onTypeFilter}
         />
       </div>
       <div className="w-1/6">
@@ -75,32 +107,6 @@ export default function BrandFilter({
             onCreatedTo(moment(value).format('YYYY/MM/DD'));
             setCreatedTo(value);
           }}
-          selectsStart
-          className="border border-border-base"
-        />
-      </div>
-      <div className="w-1/6">
-        <Label>{t('form:input-label-updatedFrom')}</Label>
-        <DatePicker
-          dateFormat="dd/MM/yyyy"
-          onChange={(value: any) => {
-            onUpdatedFrom(moment(value).format('YYYY/MM/DD'));
-            setUpdatedFrom(value);
-          }}
-          maxDate={updatedTo}
-          selectsStart
-          className="border border-border-base"
-        />
-      </div>
-      <div className="w-1/6">
-        <Label>{t('form:input-label-updatedTo')}</Label>
-        <DatePicker
-          dateFormat="dd/MM/yyyy"
-          onChange={(value: any) => {
-            onUpdatedTo(moment(value).format('YYYY/MM/DD'));
-            setUpdatedTo(value);
-          }}
-          minDate={updatedFrom}
           selectsStart
           className="border border-border-base"
         />

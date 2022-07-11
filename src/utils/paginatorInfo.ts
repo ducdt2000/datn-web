@@ -1,4 +1,13 @@
-import { PaginatorInfo } from "@ts-types/generated";
+import { PaginatorInfo } from '@ts-types/generated';
+
+export const convertToPaginatorInfo = (
+  count: number,
+  pageNumber: number,
+  limit = 10
+) => {
+  const total = count;
+  const perPage = count;
+};
 
 export const getPaginatorInfo = (data: any): PaginatorInfo => {
   if (data?.length) {
