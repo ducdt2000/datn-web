@@ -18,8 +18,9 @@ export const useUpdateProductMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({ variables: { id, input } }: IProductUpdateVariables) =>
-      ProductRepository.update(`${API_ENDPOINTS.PRODUCTS}/${id}`, input),
+    ({ variables: { id, input } }: IProductUpdateVariables) => {
+      return ProductRepository.update(`${API_ENDPOINTS.PRODUCTS}/${id}`, input);
+    },
     {
       onSuccess: () => {
         //TODO:t

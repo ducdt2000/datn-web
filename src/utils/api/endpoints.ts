@@ -1,4 +1,5 @@
 export const API_ENDPOINTS = {
+  PUBLIC_FILE: 'files/publics',
   ATTACHMENTS: 'attachments',
   BRANDS: 'brands',
   ANALYTICS: 'analytics',

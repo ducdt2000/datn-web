@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { productValidationSchema } from './product-validation-schema';
 import { useCreateProductMutation } from '@data/products/use-create-product.mutation';
 import { useUpdateProductMutation } from '@data/products/use-update-product.mutation';
@@ -17,6 +16,8 @@ import ValidationError from '@components/ui/form-validation-error';
 import TextArea from '@components/ui/text-area';
 import { useState } from 'react';
 import FileInput from '@components/ui/file-input';
+import Card from '@components/common/card';
+import { Product } from '@ts-types/generated';
 
 type FormValues = {
   name?: string | null;
@@ -25,8 +26,8 @@ type FormValues = {
   description?: string | null;
   brandId?: string | null;
   imageLinks?: [] | null;
-  defaultImageLink?: string | null;
-  properties?: [] | null;
+  defaultImageLink?: { url: string };
+  properties?: any[] | null;
   slug?: string | null;
   price?: number | null;
 };
@@ -110,15 +111,24 @@ export default function ProductForm({ initialValues }: IProps) {
   } = useForm<FormValues>({
     shouldUnregister: true,
     resolver: yupResolver(productValidationSchema),
-    defaultValues: {
-      ...initialValues,
-    },
+    //@ts-ignore
+    defaultValues: initialValues ?? { imageLinks: [], properties: [] },
   });
   const { mutate: updateProduct, isLoading: updating } =
     useUpdateProductMutation();
 
   const { mutate: createProduct, isLoading: creating } =
     useCreateProductMutation();
+
+  const {
+    fields: fieldProperties,
+    append,
+    remove,
+  } = useFieldArray({
+    control,
+    //@ts-ignore
+    name: 'properties',
+  });
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -127,9 +137,9 @@ export default function ProductForm({ initialValues }: IProps) {
       productTypeId: values.productTypeId!,
       description: values.description!,
       brandId: values.brandId!,
-      imageLinks: values.imageLinks!,
-      defaultImageLink: values.imageLinks!,
-      properties: values.imageLinks!,
+      imageLinks: values.imageLinks!.map((image: any) => image?.url),
+      defaultImageLink: values.defaultImageLink?.url,
+      properties: values.properties!,
       slug: values.slug!,
       price: values.price!,
     };
@@ -152,6 +162,14 @@ export default function ProductForm({ initialValues }: IProps) {
           label={t('form:input-label-name')}
           {...register('name')}
           error={t(errors.name?.message!)}
+          variant="outline"
+          className="mb-5"
+          required={true}
+        />
+        <Input
+          label={t('form:input-label-code')}
+          {...register('code')}
+          error={t(errors.code?.message!)}
           variant="outline"
           className="mb-5"
           required={true}
@@ -182,7 +200,71 @@ export default function ProductForm({ initialValues }: IProps) {
             setPrice(result);
           }}
         />
-        <FileInput name="" control={control} multiple={false} />
+        <br />
+        <Label>
+          {t('form:input-label-imageLinks')}
+          <Asterisk />
+        </Label>
+        <FileInput
+          {...register('imageLinks')}
+          control={control}
+          multiple={true}
+        />
+        <ValidationError message={t(errors.imageLinks?.message!)} />
+        <br />
+        <Label>
+          {t('form:input-label-defaultImage')}
+          <Asterisk />
+        </Label>
+        <FileInput
+          {...register('defaultImageLink')}
+          control={control}
+          multiple={false}
+        />
+        <ValidationError message={t(errors.defaultImageLink?.message!)} />
+        <br />
+        <Label>
+          {t('form:input-label-properties')}
+          <Asterisk />
+        </Label>
+        <Card>
+          {fieldProperties?.map((item, index) => {
+            return (
+              <Card className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+                <Input
+                  className="sm:col-span-2"
+                  label={t('form:input-label-properties')}
+                  key={item?.id}
+                  {...register(`properties.${index}.name` as const)}
+                  error={t(errors.properties?.message!)}
+                  variant="outline"
+                />
+                <Button
+                  className="bg-red-600 text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                  onClick={() => remove(index)}
+                  title={t('form:button-label-remove')}
+                >
+                  {`- ${t('form:button-label-removeProperties')}`}
+                </Button>
+                <div>
+                  <ValueArray
+                    className="sm:col-span-2"
+                    index={index}
+                    control={control}
+                    register={register}
+                  />
+                </div>
+              </Card>
+            );
+          })}
+          <Button
+            type="button"
+            onClick={() => append({ name: '' })}
+            className="w-full sm:w-auto"
+          >
+            {t('form:button-label-add-properties')}
+          </Button>
+        </Card>
       </div>
       <div className="mb-4 text-end">
         {
@@ -205,3 +287,60 @@ export default function ProductForm({ initialValues }: IProps) {
     </form>
   );
 }
+
+const ValueArray = ({
+  className,
+  index,
+  control,
+  register,
+}: {
+  className?: any;
+  index: any;
+  control: any;
+  register: any;
+}) => {
+  const { t } = useTranslation();
+
+  const {
+    fields: fieldValues,
+    append: appendValue,
+    remove: removeValue,
+  } = useFieldArray({
+    control,
+    name: `properties.${index}.values`,
+  });
+
+  const result = (
+    <div className={className ?? ''}>
+      <Button
+        type="button"
+        onClick={() => appendValue('')}
+        className="w-full sm:w-auto"
+      >
+        {t('form:button-label-add-value')}
+      </Button>
+      {fieldValues.map((item, indexValue) => {
+        return (
+          <div className="flex-row">
+            <Input
+              className="w-1/"
+              name={`${index}${indexValue}`}
+              key={item.id}
+              {...register(`properties.${index}.values.${indexValue}` as const)}
+              variant="outline"
+            />
+            <Button
+              className="bg-red-600 text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+              onClick={() => removeValue(indexValue)}
+              title={t('form:button-label-remove')}
+            >
+              -
+            </Button>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return result;
+};

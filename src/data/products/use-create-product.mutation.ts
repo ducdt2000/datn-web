@@ -17,8 +17,10 @@ export const useCreateProductMutation = () => {
   const router = useRouter();
 
   return useMutation(
-    ({ variables: { input } }: IProductCreateVariables) =>
-      ProductRepository.create(API_ENDPOINTS.PRODUCTS, input),
+    ({ variables: { input } }: IProductCreateVariables) => {
+      console.log(input);
+      return ProductRepository.create(API_ENDPOINTS.PRODUCTS, input);
+    },
     {
       onSuccess: () => {
         router.push(ROUTES.PRODUCTS);
