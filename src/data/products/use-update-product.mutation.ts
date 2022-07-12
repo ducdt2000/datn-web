@@ -3,12 +3,12 @@ import { toast } from 'react-toastify';
 import { API_ENDPOINTS } from '@utils/api/endpoints';
 import { useQueryClient, useMutation } from 'react-query';
 import { useTranslation } from 'next-i18next';
-import { CreateProductInput } from '@ts-types/generated';
+import { UpdateProductInput } from '@ts-types/generated';
 
 export interface IProductUpdateVariables {
   variables: {
     id: string;
-    input: CreateProductInput;
+    input: UpdateProductInput;
   };
 }
 
@@ -19,6 +19,7 @@ export const useUpdateProductMutation = () => {
 
   return useMutation(
     ({ variables: { id, input } }: IProductUpdateVariables) => {
+      console.log('thisisinputmu', input);
       return ProductRepository.update(`${API_ENDPOINTS.PRODUCTS}/${id}`, input);
     },
     {

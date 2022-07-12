@@ -699,6 +699,19 @@ export declare type CreateProductInput = {
   properties: Array<ProductProperty>;
 };
 
+export declare type UpdateProductInput = {
+  name: Maybe<Scalars['String']>;
+  productTypeId: Maybe<Scalars['String']>;
+  code: Maybe<Scalars['String']>;
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Maybe<Scalars['String']>;
+  price: Maybe<Scalars['Int']>;
+  imageLinks: Maybe<Array<Scalars['String']>>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Maybe<Array<ProductProperty>>;
+};
+
 export declare type UpdateProductTypeInput = {
   name?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;

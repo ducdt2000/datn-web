@@ -17,7 +17,9 @@ import TextArea from '@components/ui/text-area';
 import { useState } from 'react';
 import FileInput from '@components/ui/file-input';
 import Card from '@components/common/card';
-import { Product } from '@ts-types/generated';
+import { Product, UpdateProductInput } from '@ts-types/generated';
+import _ from 'lodash';
+import { getDifferentValue } from '@utils/compare-object';
 
 type FormValues = {
   name?: string | null;
@@ -110,7 +112,7 @@ export default function ProductForm({ initialValues }: IProps) {
     formState: { errors },
   } = useForm<FormValues>({
     shouldUnregister: true,
-    resolver: yupResolver(productValidationSchema),
+    //resolver: yupResolver(productValidationSchema),
     //@ts-ignore
     defaultValues: initialValues ?? { imageLinks: [], properties: [] },
   });
@@ -150,8 +152,14 @@ export default function ProductForm({ initialValues }: IProps) {
         variables: { input },
       });
     } else {
+      const updateInput = getDifferentValue(
+        input,
+        initialValues
+      ) as UpdateProductInput;
       // @ts-ignore
-      updateProduct({ variables: { input, id: initialValues.id } });
+      updateProduct({
+        variables: { input: updateInput, id: initialValues.id },
+      });
     }
   };
 
@@ -195,6 +203,7 @@ export default function ProductForm({ initialValues }: IProps) {
           error={t(errors.price?.message!)}
           variant="outline"
           value={price}
+          required={true}
           onChange={(value) => {
             const result = +value.target.value.replace(/\D/g, '');
             setPrice(result);

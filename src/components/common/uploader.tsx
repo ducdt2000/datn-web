@@ -27,8 +27,6 @@ export default function Uploader({ onChange, value, multiple }: any) {
           acceptedFiles, // it will be an array of uploaded attachments
           {
             onSuccess: (data) => {
-              console.log(data, 'thisisfile');
-
               let mergedData;
               if (multiple) {
                 mergedData = files.concat(data?.data);
@@ -65,7 +63,7 @@ export default function Uploader({ onChange, value, multiple }: any) {
           key={idx}
         >
           <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
-            <img src={fileData?.url} />
+            <img src={fileData?.url ?? fileData} />
           </div>
           {multiple ? (
             <button
