@@ -1,7 +1,6 @@
 import { UploadIcon } from '@components/icons/upload-icon';
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Attachment } from '@ts-types/generated';
 import { CloseIcon } from '@components/icons/close-icon';
 import Loader from '@components/ui/loader/loader';
 import { useTranslation } from 'next-i18next';
@@ -10,13 +9,17 @@ import { useUploadMutation } from '@data/uploader/use-upload.mutation';
 const getPreviewImage = (value: any) => {
   let images: any[] = [];
   if (value) {
-    images = Array.isArray(value) ? value : [{ ...value }];
+    images = Array.isArray(value) ? value : [value];
   }
   return images;
 };
 export default function Uploader({ onChange, value, multiple }: any) {
   const { t } = useTranslation();
-  const [files, setFiles] = useState<any[]>(getPreviewImage(value));
+
+  const initValue = getPreviewImage(value);
+
+  const [files, setFiles] = useState<any[]>(initValue);
+
   const { mutate: upload, isLoading: loading } = useUploadMutation();
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -55,20 +58,19 @@ export default function Uploader({ onChange, value, multiple }: any) {
   };
 
   const thumbs = files?.map((file: any, idx) => {
-    const fileData = file;
-    if (fileData?.id) {
+    if (file) {
       return (
         <div
           className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
           key={idx}
         >
           <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
-            <img src={fileData?.url ?? fileData} />
+            <img src={file?.url ?? file} />
           </div>
           {multiple ? (
             <button
               className="w-4 h-4 flex items-center justify-center rounded-full bg-red-600 text-xs text-light absolute top-1 end-1 shadow-xl outline-none"
-              onClick={() => handleDelete(fileData.url)}
+              onClick={() => handleDelete(file.url)}
             >
               <CloseIcon width={10} height={10} />
             </button>

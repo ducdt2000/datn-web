@@ -1,9 +1,9 @@
 import { Asterisk } from '@components/common/asterisk';
 import cn from 'classnames';
-import React, { InputHTMLAttributes } from 'react';
-import CurrencyInput from 'react-currency-input-field';
+import React from 'react';
+import CurrencyInput, { CurrencyInputProps } from 'react-currency-input-field';
 
-export interface Props extends InputHTMLAttributes<HTMLInputElement> {
+export interface Props extends CurrencyInputProps {
   className?: string;
   inputClassName?: string;
   label?: string;
@@ -23,7 +23,7 @@ const classes = {
   outline: 'border border-border-base focus:border-accent',
   shadow: 'focus:shadow',
 };
-const Input = React.forwardRef<HTMLInputElement, Props>(
+const CustomCurrencyInput = React.forwardRef<HTMLInputElement, Props>(
   (
     {
       className,
@@ -55,50 +55,29 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
     );
 
     return (
-      <CurrencyInput
-        className={className}
-        id={name}
-        name={name}
-        type={type}
-        ref={ref}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        spellCheck="false"
-        aria-invalid={error ? 'true' : 'false'}
-        {...rest}
-      />
+      <div className={className}>
+        <label
+          htmlFor={name}
+          className="block text-body-dark font-semibold text-sm leading-none mb-3"
+        >
+          {label}
+          {required && <Asterisk />}
+        </label>
+        <CurrencyInput
+          className={rootClassName}
+          id={name}
+          name={name}
+          type={type}
+          ref={ref}
+          {...rest}
+        />
+        {note && <p className="mt-2 text-xs text-body">{note}</p>}
+        {error && (
+          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+        )}
+      </div>
     );
-
-    // return (
-    //   <div className={className}>
-    //     <label
-    //       htmlFor={name}
-    //       className="block text-body-dark font-semibold text-sm leading-none mb-3"
-    //     >
-    //       {label}
-    //       {required && <Asterisk />}
-    //     </label>
-    //     <input
-    //       id={name}
-    //       name={name}
-    //       type={type}
-    //       ref={ref}
-    //       className={rootClassName}
-    //       autoComplete="off"
-    //       autoCorrect="off"
-    //       autoCapitalize="off"
-    //       spellCheck="false"
-    //       aria-invalid={error ? 'true' : 'false'}
-    //       {...rest}
-    //     />
-    //     {note && <p className="mt-2 text-xs text-body">{note}</p>}
-    //     {error && (
-    //       <p className="my-2 text-xs text-start text-red-500">{error}</p>
-    //     )}
-    //   </div>
-    // );
   }
 );
 
-export default Input;
+export default CustomCurrencyInput;

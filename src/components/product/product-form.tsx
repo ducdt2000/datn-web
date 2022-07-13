@@ -20,6 +20,10 @@ import Card from '@components/common/card';
 import { Product, UpdateProductInput } from '@ts-types/generated';
 import _ from 'lodash';
 import { getDifferentValue } from '@utils/compare-object';
+import CustomCurrencyInput from '@components/ui/currency-input';
+import NotificationCard from '@components/ui/notification-card';
+import { toast } from 'react-toastify';
+import Alert from '@components/ui/alert';
 
 type FormValues = {
   name?: string | null;
@@ -103,12 +107,13 @@ export default function ProductForm({ initialValues }: IProps) {
 
   const { t } = useTranslation();
 
-  const [price, setPrice] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -116,6 +121,7 @@ export default function ProductForm({ initialValues }: IProps) {
     //@ts-ignore
     defaultValues: initialValues ?? { imageLinks: [], properties: [] },
   });
+
   const { mutate: updateProduct, isLoading: updating } =
     useUpdateProductMutation();
 
@@ -139,161 +145,193 @@ export default function ProductForm({ initialValues }: IProps) {
       productTypeId: values.productTypeId!,
       description: values.description!,
       brandId: values.brandId!,
-      imageLinks: values.imageLinks!.map((image: any) => image?.url),
-      defaultImageLink: values.defaultImageLink?.url,
+      //TODO:
+      imageLinks: values.imageLinks!.map((image: any) => image?.url ?? image),
+      defaultImageLink: values.defaultImageLink?.url ?? values.defaultImageLink,
       properties: values.properties!,
       slug: values.slug!,
       price: values.price!,
     };
 
     if (!initialValues) {
-      createProduct({
-        // @ts-ignore
-        variables: { input },
-      });
+      createProduct(
+        {
+          // @ts-ignore
+          variables: { input },
+        },
+        {
+          onSuccess: (data) => {
+            return <NotificationCard />;
+          },
+        }
+      );
     } else {
       const updateInput = getDifferentValue(
         input,
         initialValues
       ) as UpdateProductInput;
       // @ts-ignore
-      updateProduct({
-        variables: { input: updateInput, id: initialValues.id },
-      });
+      updateProduct(
+        {
+          variables: { input: updateInput, id: initialValues.id },
+        },
+        {
+          // @ts-ignore
+          onSuccess: (data) => {
+            router.back();
+          },
+          onError: (error: any, _variable, _options) => {
+            setErrorMessage(error?.response?.data?.error?.message);
+            console.log('thissierrord', error?.response?.data?.error?.message);
+          },
+        }
+      );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4">
-        <Input
-          label={t('form:input-label-name')}
-          {...register('name')}
-          error={t(errors.name?.message!)}
-          variant="outline"
-          className="mb-5"
-          required={true}
-        />
-        <Input
-          label={t('form:input-label-code')}
-          {...register('code')}
-          error={t(errors.code?.message!)}
-          variant="outline"
-          className="mb-5"
-          required={true}
-        />
-        <Input
-          label={t('form:input-label-slug')}
-          {...register('slug')}
-          error={t(errors.slug?.message!)}
-          variant="outline"
-          className="mb-5"
-        />
-        <SelectBrand control={control} errors={errors} />
-        <br />
-        <SelectProductType control={control} errors={errors} />
-        <TextArea
-          label={t('form:input-label-description')}
-          {...register('description')}
-          variant="outline"
-        />
-        <Input
-          label={t('form:input-label-price')}
-          {...register('price')}
-          error={t(errors.price?.message!)}
-          variant="outline"
-          value={price}
-          required={true}
-          onChange={(value) => {
-            const result = +value.target.value.replace(/\D/g, '');
-            setPrice(result);
-          }}
-        />
-        <br />
-        <Label>
-          {t('form:input-label-imageLinks')}
-          <Asterisk />
-        </Label>
-        <FileInput
-          {...register('imageLinks')}
-          control={control}
-          multiple={true}
-        />
-        <ValidationError message={t(errors.imageLinks?.message!)} />
-        <br />
-        <Label>
-          {t('form:input-label-defaultImage')}
-          <Asterisk />
-        </Label>
-        <FileInput
-          {...register('defaultImageLink')}
-          control={control}
-          multiple={false}
-        />
-        <ValidationError message={t(errors.defaultImageLink?.message!)} />
-        <br />
-        <Label>
-          {t('form:input-label-properties')}
-          <Asterisk />
-        </Label>
-        <Card>
-          {fieldProperties?.map((item, index) => {
-            return (
-              <Card className="grid grid-cols-1 sm:grid-cols-5 gap-5">
-                <Input
-                  className="sm:col-span-2"
-                  label={t('form:input-label-properties')}
-                  key={item?.id}
-                  {...register(`properties.${index}.name` as const)}
-                  error={t(errors.properties?.message!)}
-                  variant="outline"
-                />
-                <Button
-                  className="bg-red-600 text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
-                  onClick={() => remove(index)}
-                  title={t('form:button-label-remove')}
-                >
-                  {`- ${t('form:button-label-removeProperties')}`}
-                </Button>
-                <div>
-                  <ValueArray
-                    className="sm:col-span-2"
-                    index={index}
-                    control={control}
-                    register={register}
-                  />
-                </div>
-              </Card>
-            );
-          })}
-          <Button
-            type="button"
-            onClick={() => append({ name: '' })}
-            className="w-full sm:w-auto"
-          >
-            {t('form:button-label-add-properties')}
-          </Button>
-        </Card>
-      </div>
-      <div className="mb-4 text-end">
-        {
-          <Button
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <Input
+            label={t('form:input-label-name')}
+            {...register('name')}
+            error={t(errors.name?.message!)}
             variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        }
+            className="mb-5"
+            required={true}
+          />
+          <Input
+            label={t('form:input-label-code')}
+            {...register('code')}
+            error={t(errors.code?.message!)}
+            variant="outline"
+            className="mb-5"
+            required={true}
+          />
+          <Input
+            label={t('form:input-label-slug')}
+            {...register('slug')}
+            error={t(errors.slug?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <SelectBrand control={control} errors={errors} />
+          <br />
+          <SelectProductType control={control} errors={errors} />
+          <TextArea
+            label={t('form:input-label-description')}
+            {...register('description')}
+            variant="outline"
+          />
+          <CustomCurrencyInput
+            label={t('form:input-label-price')}
+            defaultValue={initialValues?.price}
+            onValueChange={(value, _name, _values) => {
+              setValue('price', +(value ?? 0));
+            }}
+            name="price"
+            error={t(errors.price?.message!)}
+            variant="outline"
+            prefix="VNĐ: "
+            className="mb-5"
+            required={true}
+          />
+          <br />
+          <Label>
+            {t('form:input-label-imageLinks')}
+            <Asterisk />
+          </Label>
+          <FileInput
+            {...register('imageLinks')}
+            control={control}
+            multiple={true}
+          />
+          <ValidationError message={t(errors.imageLinks?.message!)} />
+          <br />
+          <Label>
+            {t('form:input-label-defaultImage')}
+            <Asterisk />
+          </Label>
+          <FileInput
+            {...register('defaultImageLink')}
+            control={control}
+            multiple={false}
+          />
+          <ValidationError message={t(errors.defaultImageLink?.message!)} />
+          <br />
+          <Label>
+            {t('form:input-label-properties')}
+            <Asterisk />
+          </Label>
+          <Card>
+            {fieldProperties?.map((item, index) => {
+              return (
+                <Card className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+                  <Input
+                    className="sm:col-span-2"
+                    label={t('form:input-label-properties')}
+                    key={item?.id}
+                    {...register(`properties.${index}.name` as const)}
+                    error={t(errors.properties?.message!)}
+                    variant="outline"
+                  />
+                  <Button
+                    className="bg-red-600 text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                    onClick={() => remove(index)}
+                    title={t('form:button-label-remove')}
+                  >
+                    {`- ${t('form:button-label-removeProperties')}`}
+                  </Button>
+                  <div>
+                    <ValueArray
+                      className="sm:col-span-2"
+                      index={index}
+                      control={control}
+                      register={register}
+                    />
+                  </div>
+                </Card>
+              );
+            })}
+            <Button
+              type="button"
+              onClick={() => append({ name: '' })}
+              className="w-full sm:w-auto"
+            >
+              {t('form:button-label-add-properties')}
+            </Button>
+          </Card>
+        </div>
+        <div className="mb-4 text-end">
+          {
+            <Button
+              variant="outline"
+              onClick={router.back}
+              className="me-4"
+              type="button"
+            >
+              {t('form:button-label-back')}
+            </Button>
+          }
 
-        <Button loading={creating || updating}>
-          {initialValues
-            ? t('form:button-label-update-product')
-            : t('form:button-label-add-product')}
-        </Button>
-      </div>
-    </form>
+          <Button loading={creating || updating}>
+            {initialValues
+              ? t('form:button-label-update-product')
+              : t('form:button-label-add-product')}
+          </Button>
+        </div>
+      </form>
+      {errorMessage ? (
+        <Alert
+          message={t(`${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
+        />
+      ) : null}
+    </>
   );
 }
 
