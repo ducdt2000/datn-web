@@ -3,27 +3,33 @@ import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ROUTES } from '@utils/routes';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Link from '@components/ui/link';
-import { allowedRoles, hasAccess, setAuthCredentials } from '@utils/auth-utils';
+import { saveAuthCredentials } from '@utils/auth-utils';
 import { useRegisterMutation } from '@data/user/use-register.mutation';
 import { GENDER, ROLE } from '@ts-types/custom.types';
 import { DatePicker } from '@components/ui/date-picker';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
+import moment from 'moment';
 // import * as yupphone from 'yup-phone';
 import ValidationError from '@components/ui/form-validation-error';
-import useLocationForm from '@data/address/use-address-form';
-
+import { useLoginMutation } from '@data/user/use-login.mutation';
 const genderOptions = [
-  { name: 'option:male-name', value: GENDER.MALE },
-  { name: 'option:female-name', value: GENDER.FEMALE },
-  { name: 'option:other-name', value: GENDER.OTHER },
+  { value: +GENDER.MALE, name: 'option:male-name' },
+  { value: +GENDER.FEMALE, name: 'option:female-name' },
+  { value: +GENDER.OTHER, name: 'option:other-name' },
+];
+
+const roleOptions = [
+  { value: ROLE.USER, name: 'option:user-name' },
+  { value: ROLE.STAFF, name: 'option:staff-name' },
+  { value: ROLE.ADMIN, name: 'option:admin-name' },
 ];
 
 type FormValues = {
@@ -55,13 +61,13 @@ const registrationFormSchema = yup.object().shape({
   address: yup.string().required('form:error-address-required'),
   city: yup.string().required('form:error-city-required'),
   district: yup.string().required('form:error-district-required'),
-  gender: yup.number().required('form:error-gender-required'),
+  gender: yup.mixed().required('form:error-gender-required'),
   birthday: yup.date().required('form:error-birthday-required'),
-  role: yup.string().required('form: error-role-required').default(ROLE.USER),
+  role: yup.mixed().required('form: error-role-required').default(ROLE.USER),
   inviteCode: yup.string().notRequired(),
 });
 
-// const registrationFormSchema = yup.object().shape({
+// const registrationFormScheBadRequestExceptionma = yup.object().shape({
 //   name: yup.string().required('form:error-name-required'),
 //   email: yup
 //     .string()
@@ -73,26 +79,27 @@ const registrationFormSchema = yup.object().shape({
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
+  const { mutate: login, isLoading: loginLoading } = useLoginMutation();
 
-  const {
-    state: locationState,
-    onCitySelect,
-    onDistrictSelect,
-  } = useLocationForm();
+  // const {
+  //   state: locationState,
+  //   onCitySelect,
+  //   onDistrictSelect,
+  // } = useLocationForm(true);
 
-  const { cityOptions, districtOptions, selectedCity, selectedDistrict } =
-    locationState;
+  // const { cityOptions, districtOptions, selectedCity, selectedDistrict } =
+  //   locationState;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setError,
   } = useForm<FormValues>({
     resolver: yupResolver(registrationFormSchema),
     defaultValues: {
       role: ROLE.USER,
+      birthday: moment().toDate(),
     },
   });
   const router = useRouter();
@@ -103,28 +110,44 @@ const RegistrationForm = () => {
       {
         variables: input,
       },
-
       {
-        onSuccess: ({ data }) => {
-          if (data?.token) {
-            if (hasAccess(allowedRoles, data?.permissions)) {
-              setAuthCredentials(data?.token, data?.permissions);
-              router.push(ROUTES.DASHBOARD);
-              return;
+        onSuccess: () => {
+          const loginInput = {
+            account: input.username,
+            password: input.password,
+          };
+
+          login(
+            { variables: loginInput },
+            {
+              onSuccess: ({ data: loginData }) => {
+                if (loginData?.data) {
+                  saveAuthCredentials(
+                    loginData?.data?.token,
+                    loginData?.data?.detail.role
+                  );
+                  router.push(ROUTES.DASHBOARD);
+                  return;
+                } else {
+                  setErrorMessage('form:error-credential-wrong');
+                }
+              },
+              onError: (err: any) => {
+                setErrorMessage(err);
+              },
             }
-            setErrorMessage('form:error-enough-permission');
-          } else {
-            setErrorMessage('form:error-credential-wrong');
-          }
+          );
         },
-        onError: (error: any) => {
-          Object.keys(error?.response?.data).forEach((field: any) => {
-            setError(field, {
-              type: 'manual',
-              message: error?.response?.data[field],
-            });
-          });
-        },
+        // onError: (error: any) => {
+        //   console.log(error);
+
+        //   Object.keys(error?.response?.data).forEach((field: any) => {
+        //     setError(field, {
+        //       type: 'manual',
+        //       message: error?.response?.data[field],
+        //     });
+        //   });
+        // },
       }
     );
   }
@@ -168,10 +191,28 @@ const RegistrationForm = () => {
           variant="outline"
           className="mb-4"
         />
+        <Input
+          label={t('form:input-label-city')}
+          {...register('city')}
+          variant="outline"
+          className="mb-4"
+          error={t(errors?.city?.message!)}
+        />
+        <Input
+          label={t('form:input-label-disctrict')}
+          {...register('district')}
+          variant="outline"
+          className="mb-4"
+          error={t(errors?.district?.message!)}
+        />
+
+        {/*
+        //TODO: react hook
         <div className="mb-4">
           <Label>{t('form:input-label-city')}</Label>
           <SelectInput
             name="city"
+            defaultValue={selectedCity}
             control={control}
             onChange={(option: any) => onCitySelect(option)}
             getOptionLabel={(option: any) => t(option.name)}
@@ -185,19 +226,15 @@ const RegistrationForm = () => {
           <SelectInput
             name="district"
             control={control}
+            onChange={(options: any) => onDistrictSelect(options)}
+            defaultValue={selectedDistrict}
             getOptionLabel={(option: any) => t(option.name)}
             getOptionVale={(option: any) => option.value}
             options={districtOptions}
           />
-          <ValidationError message={t(errors?.city?.message!)} />
+          <ValidationError message={t(errors?.district?.message!)} />
         </div>
-        <Input
-          label={t('form:input-label-district')}
-          {...register('district')}
-          variant="outline"
-          className="mb-4"
-          error={t(errors?.district?.message!)}
-        />
+         */}
         <Input
           label={t('form:input-label-address')}
           {...register('address')}
@@ -210,11 +247,22 @@ const RegistrationForm = () => {
           <SelectInput
             name="gender"
             control={control}
-            getOptionLabel={(option: any) => t(option.name)}
-            getOptionVale={(option: any) => option.value}
+            getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.value}
             options={genderOptions}
           />
           <ValidationError message={t(errors?.gender?.message!)} />
+        </div>
+        <div className="mb-4">
+          <Label>{t('form:input-label-role')}</Label>
+          <SelectInput
+            name="role"
+            control={control}
+            getOptionLabel={(option: any) => option.name}
+            getOptionValue={(option: any) => option.value}
+            options={roleOptions}
+          />
+          <ValidationError message={t(errors?.role?.message!)} />
         </div>
         <div className="mb-4">
           <Label>{t('form:input-label-birthday')}</Label>
@@ -226,13 +274,14 @@ const RegistrationForm = () => {
                 dateFormat="dd/MM/yyyy"
                 onChange={onChange}
                 onBlur={onBlur}
-                selected={value}
+                selected={value ?? new Date()}
                 selectsStart
                 className="border border-border-base"
                 placeholderText={new Date().toLocaleDateString()}
               />
             )}
           />
+          <ValidationError message={t(errors?.birthday?.message!)} />
         </div>
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('form:text-register')}

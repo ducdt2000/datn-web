@@ -1,5 +1,7 @@
 export const API_ENDPOINTS = {
+  PUBLIC_FILE: 'files/publics',
   ATTACHMENTS: 'attachments',
+  BRANDS: 'brands',
   ANALYTICS: 'analytics',
   ATTRIBUTES: 'attributes',
   ATTRIBUTE_VALUES: 'attribute-values',
@@ -7,6 +9,8 @@ export const API_ENDPOINTS = {
   ORDERS: 'orders',
   USERS: 'users',
   REGISTER: 'auth/register',
+  LOGIN: 'auth/login',
+  PRODUCT_TYPES: 'product-types',
   PRODUCTS: 'products',
   POPULAR_PRODUCTS: 'popular-products',
   COUPONS: 'coupons',

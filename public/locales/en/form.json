@@ -304,5 +304,9 @@
   "form:error-district-required":"District is required",
   "form:error-gender-required": "Gender is required",
   "form:error-birthday-required": "Birthday is required",
-  "form: error-role-required": "Role is required"
+  "form: error-role-required": "Role is required",
+  "input-label-productTypes": "Product Types",
+  "button-label-add-productTypes": "Create Product Type",
+  "button-label-update-productTypes": "Update Product Type",
+  "form:form-title-create-productType": "Create Product Type"
 }

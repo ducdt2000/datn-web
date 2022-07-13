@@ -6,7 +6,7 @@ import Router from 'next/router';
 
 const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_REST_API_ENDPOINT, // TODO: take this api URL from env
-  timeout: 30000,
+  timeout: 3000,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

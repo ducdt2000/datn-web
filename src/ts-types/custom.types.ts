@@ -1,5 +1,29 @@
 import { QueryKey } from 'react-query';
 
+export type BrandsQueryOptionsType = {
+  type?: string;
+  search?: string;
+  orderBy?: string;
+  orderType?: ORDER_TYPE;
+  createdFrom?: Date;
+  createdTo?: Date;
+  updatedFrom?: Date;
+  updatedTo?: Date;
+};
+
+export type ProductsQueryOptionsType = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  brandId?: string;
+  productTypeId?: string;
+  brandType?: string;
+  dateFrom?: Date;
+  dateTo?: Date;
+  orderBy?: PRODUCT_ORDER_BY;
+  orderType?: ORDER_TYPE;
+};
+
 export type CategoriesQueryOptionsType = {
   type?: string;
   text?: string;
@@ -35,17 +59,7 @@ export type WithdrawsQueryOptionsType = {
   orderBy?: string;
   orderType?: ORDER_TYPE;
 };
-export type ProductsQueryOptionsType = {
-  page?: number;
-  shop_id?: number;
-  text?: string;
-  type?: string;
-  category?: string;
-  status?: string;
-  limit?: number;
-  orderBy?: string;
-  orderType?: ORDER_TYPE;
-};
+
 export type TypesQueryOptionsType = {
   page?: number;
   text?: string;

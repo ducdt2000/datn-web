@@ -1,22 +1,22 @@
-import Logo from "@components/ui/logo";
-import { useUI } from "@contexts/ui.context";
-import AuthorizedMenu from "./authorized-menu";
-import LinkButton from "@components/ui/link-button";
-import { NavbarIcon } from "@components/icons/navbar-icon";
-import { motion } from "framer-motion";
-import { useTranslation } from "next-i18next";
-import { ROUTES } from "@utils/routes";
+import Logo from '@components/ui/logo';
+import { useUI } from '@contexts/ui.context';
+import AuthorizedMenu from './authorized-menu';
+import LinkButton from '@components/ui/link-button';
+import { NavbarIcon } from '@components/icons/navbar-icon';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'next-i18next';
+import { ROUTES } from '@utils/routes';
 import {
-  adminAndOwnerOnly,
+  allowedRoles,
+  checkRoleAccess,
   getAuthCredentials,
-  hasAccess,
-} from "@utils/auth-utils";
+} from '@utils/auth-utils';
 
 const Navbar = () => {
   const { t } = useTranslation();
   const { toggleSidebar } = useUI();
 
-  const { permissions } = getAuthCredentials();
+  const { role } = getAuthCredentials();
 
   return (
     <header className="bg-white shadow fixed w-full z-40">
@@ -35,13 +35,13 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-s-8">
-          {hasAccess(adminAndOwnerOnly, permissions) && (
+          {checkRoleAccess(allowedRoles, role) && (
             <LinkButton
               href={ROUTES.CREATE_SHOP}
               className="ms-4 md:ms-6"
               size="small"
             >
-              {t("common:text-create-shop")}
+              {t('common:text-create-shop')}
             </LinkButton>
           )}
 

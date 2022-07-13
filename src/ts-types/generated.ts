@@ -66,7 +66,7 @@ export declare type OrderPaginator = {
   /** Pagination information about the list of items. */
   paginatorInfo: PaginatorInfo;
   /** A list of Order items. */
-  data: Array<Order>;
+  data: Array<any>;
 };
 /** Pagination information about the corresponding list of items. */
 export declare type PaginatorInfo = {
@@ -83,78 +83,12 @@ export declare type PaginatorInfo = {
   /** Total items available in the collection. */
   total: Scalars['Int'];
 };
-export declare type Order = {
-  id: Scalars['ID'];
-  tracking_number: Scalars['String'];
-  customer_contact: Scalars['String'];
-  customer_id: Scalars['Int'];
-  customer?: Maybe<User>;
-  status: OrderStatus;
-  amount: Scalars['Float'];
-  sales_tax: Scalars['Float'];
-  total: Scalars['Float'];
-  paid_total: Scalars['Float'];
-  payment_id?: Maybe<Scalars['String']>;
-  payment_gateway?: Maybe<Scalars['String']>;
-  coupon?: Maybe<Coupon>;
-  discount?: Maybe<Scalars['Float']>;
-  delivery_fee?: Maybe<Scalars['Float']>;
-  delivery_time: Scalars['String'];
-  products: Array<Product>;
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-  billing_address?: Maybe<UserAddress>;
-  shipping_address?: Maybe<UserAddress>;
-};
+
 export declare type OrderStatus = {
   id: Scalars['ID'];
   name: Scalars['String'];
   color: Scalars['String'];
   serial: Scalars['Int'];
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-};
-export declare type Coupon = {
-  id: Scalars['ID'];
-  code: Scalars['String'];
-  description: Scalars['String'];
-  orders: Array<Order>;
-  type: Scalars['String'];
-  image: Scalars['String'];
-  amount: Scalars['Float'];
-  active_from: Scalars['DateTime'];
-  expire_at: Scalars['DateTime'];
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-};
-export declare type Product = {
-  id: Scalars['ID'];
-  shop_id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  type: Type;
-  product_type: ProductType;
-  max_price?: Maybe<Scalars['Float']>;
-  min_price?: Maybe<Scalars['Float']>;
-  categories: Array<Category>;
-  variations?: Maybe<Array<Maybe<AttributeValue>>>;
-  variation_options?: Maybe<Array<Maybe<Variation>>>;
-  pivot?: Maybe<OrderProductPivot>;
-  orders: Array<Order>;
-  description?: Maybe<Scalars['String']>;
-  in_stock?: Maybe<Scalars['Boolean']>;
-  is_taxable?: Maybe<Scalars['Boolean']>;
-  sale_price?: Maybe<Scalars['Float']>;
-  sku?: Maybe<Scalars['String']>;
-  gallery?: Maybe<Array<Maybe<Attachment>>>;
-  image?: Maybe<Attachment>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['String']>;
-  price: Scalars['Float'];
-  quantity?: Maybe<Scalars['Int']>;
-  unit?: Maybe<Scalars['String']>;
   created_at: Scalars['DateTime'];
   updated_at: Scalars['DateTime'];
 };
@@ -256,41 +190,21 @@ export declare type ProductPaginator = {
   /** Pagination information about the list of items. */
   paginatorInfo: PaginatorInfo;
   /** A list of Product items. */
-  data: Array<Product>;
+  data: Array<any>;
 };
-export declare type Category = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  parent?: Maybe<Scalars['Int']>;
-  children: Array<Category>;
-  details?: Maybe<Scalars['String']>;
-  image?: Maybe<Attachment>;
-  icon?: Maybe<Scalars['String']>;
-  type: Type;
-  products: Array<Product>;
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-};
+
 export declare type Attachment = {
   thumbnail?: Maybe<Scalars['String']>;
   original?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
 };
-export declare type AttributeValue = {
+
+export declare type File = BaseOutput & {
   id: Scalars['ID'];
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Attribute>;
-  products: Array<Product>;
-  pivot?: Maybe<VariationProductPivot>;
+  url: Scalars['String'];
+  key: Scalars['String'];
 };
-export declare type Attribute = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  values: Array<AttributeValue>;
-  shop_id?: Maybe<Scalars['Int']>;
-};
+
 export declare type VariationProductPivot = {
   price?: Maybe<Scalars['Float']>;
 };
@@ -303,21 +217,6 @@ export enum ProductStatus {
   Publish = 'publish',
   Draft = 'draft',
 }
-
-/** A paginated list of Category items. */
-export declare type CategoryPaginator = {
-  /** Pagination information about the list of items. */
-  paginatorInfo: PaginatorInfo;
-  /** A list of Category items. */
-  data: Array<Category>;
-};
-/** A paginated list of Coupon items. */
-export declare type CouponPaginator = {
-  /** Pagination information about the list of items. */
-  paginatorInfo: PaginatorInfo;
-  /** A list of Coupon items. */
-  data: Array<Coupon>;
-};
 
 /** A paginated list of OrderStatus items. */
 export declare type OrderStatusPaginator = {
@@ -514,6 +413,37 @@ export declare type CreateOrder = {
   billing_address?: Maybe<UserAddressInput>;
   shipping_address?: Maybe<UserAddressInput>;
 };
+
+export declare type ProductTypePaginator = {
+  data: Array<ProductType>;
+};
+
+export declare type BrandPaginator = {
+  data: Array<Brand>;
+};
+
+export declare type CreateBrand = {
+  name: Scalars['String'];
+  type: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export declare type UpdateBrand = {
+  name: Maybe<Scalars['String']>;
+  type: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+};
+
+export declare type CreateProductType = {
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type UpdateProductType = {
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
+
 export declare type CardInput = {
   number: Scalars['String'];
   expiryMonth: Scalars['String'];
@@ -536,48 +466,40 @@ export declare type OrderStatusUpdateInput = {
 
 export declare type CreateProduct = {
   name: Scalars['String'];
-  type_id: Scalars['String'];
-  price: Scalars['Float'];
-  sale_price?: Maybe<Scalars['Float']>;
-  quantity: Scalars['Int'];
-  unit: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  categories?: Maybe<Array<Scalars['ID']>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars['Boolean']>;
-  is_taxable?: Maybe<Scalars['Boolean']>;
-  sku?: Maybe<Scalars['String']>;
-  gallery?: Maybe<Array<Maybe<AttachmentInput>>>;
-  image?: Maybe<AttachmentInput>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['String']>;
+  productTypeId: Scalars['String'];
+  code: Scalars['String'];
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Scalars['String'];
+  price: Scalars['Int'];
+  imageLinks: Array<Scalars['String']>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Array<ProductProperty>;
 };
+
+export declare type UpdateProduct = {
+  name: Maybe<Scalars['String']>;
+  productTypeId: Maybe<Scalars['String']>;
+  code: Maybe<Scalars['String']>;
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Maybe<Scalars['String']>;
+  price: Maybe<Scalars['Int']>;
+  imageLinks: Maybe<Array<Scalars['String']>>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Maybe<Array<ProductProperty>>;
+};
+
+export declare type ProductProperty = {
+  name: Scalars['String'];
+  values: Array<Scalars['String']>;
+};
+
 export declare type AttributeProductPivot = {
   id: Scalars['ID'];
   price?: Maybe<Scalars['Float']>;
 };
-export declare type UpdateProduct = {
-  name: Scalars['String'];
-  type_id: Scalars['String'];
-  price: Scalars['Float'];
-  sale_price?: Maybe<Scalars['Float']>;
-  quantity: Scalars['Int'];
-  unit: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  categories?: Maybe<Array<Scalars['ID']>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars['Boolean']>;
-  is_taxable?: Maybe<Scalars['Boolean']>;
-  sku?: Maybe<Scalars['String']>;
-  gallery?: Maybe<Array<Maybe<AttachmentInput>>>;
-  image?: Maybe<AttachmentInput>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['String']>;
-};
+
 export declare type ProfileInput = {
   avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
@@ -611,7 +533,7 @@ export type SettingsOptions = {
   shippingClass?: Maybe<Scalars['String']>;
 };
 export declare type LoginInput = {
-  email: Scalars['String'];
+  account: Scalars['String'];
   password: Scalars['String'];
 };
 export declare type RegisterInput = {
@@ -715,12 +637,85 @@ export type CreateTypeInput = {
   banner_text?: Maybe<Scalars['String']>;
 };
 
-export enum ProductType {
-  /** Simple */
-  Simple = 'simple',
-  /** Variable */
-  Variable = 'variable',
-}
+export declare type BaseOutput = {
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
+};
+
+export declare type ProductType = BaseOutput & {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type Brand = BaseOutput & {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export declare type Product = BaseOutput & {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  productTypeId: Scalars['String'];
+  code: Scalars['String'];
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Scalars['String'];
+  price: Scalars['Int'];
+  imageLinks: Array<Scalars['String']>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Array<ProductProperty>;
+};
+
+export declare type CreateBrandInput = {
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export declare type UpdateBrandInput = {
+  name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export declare type CreateProductTypeInput = {
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export declare type CreateProductInput = {
+  name: Scalars['String'];
+  productTypeId: Scalars['String'];
+  code: Scalars['String'];
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Scalars['String'];
+  price: Scalars['Int'];
+  imageLinks: Array<Scalars['String']>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Array<ProductProperty>;
+};
+
+export declare type UpdateProductInput = {
+  name: Maybe<Scalars['String']>;
+  productTypeId: Maybe<Scalars['String']>;
+  code: Maybe<Scalars['String']>;
+  description: Maybe<Scalars['String']>;
+  slug: Maybe<Scalars['String']>;
+  brandId: Maybe<Scalars['String']>;
+  price: Maybe<Scalars['Int']>;
+  imageLinks: Maybe<Array<Scalars['String']>>;
+  defaultImageLink: Maybe<Scalars['String']>;
+  properties: Maybe<Array<ProductProperty>>;
+};
+
+export declare type UpdateProductTypeInput = {
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
 
 export declare type ApproveShopInput = {
   id: Scalars['ID'];
@@ -815,19 +810,6 @@ export declare type ShopPaginator = {
   data: Array<Shop>;
 };
 
-export declare type Tag = {
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  parent?: Maybe<Scalars['Int']>;
-  details?: Maybe<Scalars['String']>;
-  image?: Maybe<Attachment>;
-  icon?: Maybe<Scalars['String']>;
-  type?: Maybe<Type>;
-  products?: Maybe<Array<Maybe<Product>>>;
-  created_at?: Maybe<Scalars['DateTime']>;
-  updated_at?: Maybe<Scalars['DateTime']>;
-};
 /** A paginated list of Tag items. */
 
 export declare type TagPaginator = {
@@ -836,7 +818,7 @@ export declare type TagPaginator = {
   paginatorInfo: PaginatorInfo;
   /** A list of Tag items. */
 
-  data: Array<Tag>;
+  data: Array<any>;
 };
 
 export declare type CreateTagInput = {
