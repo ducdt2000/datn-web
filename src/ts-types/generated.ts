@@ -37,16 +37,22 @@ export declare type UserAddress = {
 };
 export declare type User = {
   id: Scalars['ID'];
-  name: Scalars['String'];
-  shops: [Shop];
-  managed_shop: Shop;
-  is_active: Boolean;
+  fullname: Scalars['String'];
+  username: Scalars['String'];
   email: Scalars['String'];
-  created_at: Scalars['DateTime'];
-  updated_at: Scalars['DateTime'];
-  profile?: Maybe<Profile>;
-  address: Array<Address>;
-  orders?: Maybe<OrderPaginator>;
+  phone: Scalars['String'];
+  address: Scalars['String'];
+  city: Scalars['String'];
+  district: Scalars['String'];
+  gender: Scalars['Int'];
+  avatarLink: Maybe<Scalars['String']>;
+  birthday: Scalars['Date'];
+  inviteCode: Maybe<Scalars['String']>;
+  role: Scalars['String'];
+  isActive: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  deletedAt: Maybe<Scalars['Date']>;
 };
 
 export declare type Profile = {

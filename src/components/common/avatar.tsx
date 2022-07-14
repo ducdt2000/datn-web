@@ -1,5 +1,5 @@
-import cn from "classnames";
-import Image from "next/image";
+import cn from 'classnames';
+import Image from 'next/image';
 
 type AvatarProps = {
   className?: string;
@@ -13,14 +13,15 @@ type AvatarProps = {
 const Avatar: React.FC<AvatarProps> = ({
   src,
   className,
-  alt = "Avatar",
+  alt = 'Avatar',
   onClick,
   ...rest
 }) => {
+  console.log('thisiscompoent', src);
   return (
     <div
       className={cn(
-        "relative cursor-pointer w-10 h-10 overflow-hidden rounded-full border border-border-100",
+        'relative cursor-pointer w-10 h-10 overflow-hidden rounded-full border border-border-100',
         className
       )}
       {...rest}
