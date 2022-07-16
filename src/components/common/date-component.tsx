@@ -3,7 +3,14 @@ import moment from 'moment';
 export const DateComponent = ({
   format = 'DD/MM/yyyy',
   date,
+  className = '',
+  ...props
 }: {
   format?: string;
   date: Date;
-}) => <span>{moment(date).format(format)}</span>;
+  className?: string;
+}) => (
+  <span {...props} className={className}>
+    {moment(date).format(format)}
+  </span>
+);

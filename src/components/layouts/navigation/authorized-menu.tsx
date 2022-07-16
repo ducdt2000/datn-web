@@ -44,7 +44,7 @@ export default function AuthorizedMenu() {
           </Menu.Item>
           {siteSettings.authorizedLinks.map(({ href, labelTransKey }) => (
             <Menu.Item key={`${href}${labelTransKey}`}>
-              {({ active }) => (
+              {({ active }: any) => (
                 <li className="border-b border-gray-100 cursor-pointer last:border-0">
                   <Link
                     href={href}

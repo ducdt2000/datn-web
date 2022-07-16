@@ -47,12 +47,12 @@ class User extends Base<CreateUser, UpdateUser> {
     return this.http<ResetPasswordInput>(url, 'post', variables);
   };
 
-  block = async (url: string, variables: { id: number }) => {
-    return this.http<{ id: number }>(url, 'post', variables);
+  lock = async (url: string, variables: { userId: string }) => {
+    return this.http<{ userId: string }>(url, 'post', variables);
   };
 
-  unblock = async (url: string, variables: { id: number }) => {
-    return this.http<{ id: number }>(url, 'post', variables);
+  unlock = async (url: string, variables: { userId: string }) => {
+    return this.http<{ userId: string }>(url, 'post', variables);
   };
 }
 

@@ -2,20 +2,29 @@ import ActionButtons from '@components/common/action-buttons';
 import { DateComponent } from '@components/common/date-component';
 import Pagination from '@components/ui/pagination';
 import { AntdTable } from '@components/ui/table';
-import { ProductPaginator } from '@ts-types/generated';
+import { UserPaginator, USER_ACTIVE } from '@ts-types/generated';
 import { Image } from 'antd';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { siteSettings } from '@settings/site.settings';
+import { GENDER } from '@ts-types/generated';
+import { CheckMarkCircle } from '@components/icons/checkmark-circle';
+import { BanUser } from '@components/icons/ban-user';
+
+const genderMap = new Map<number, string>();
+genderMap.set(GENDER.FEMALE, 'option:female-name');
+genderMap.set(GENDER.MALE, 'option:male-name');
+genderMap.set(GENDER.OTHER, 'option:other-name');
 
 export type IProps = {
-  products?: ProductPaginator;
+  users?: UserPaginator;
   meta?: any;
   onPagination?: (current: number) => void;
   onOrder?: (by: string | undefined, type: string | undefined) => void;
 };
 
-const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
-  const { data } = products! ?? [];
+const UserList = ({ users, onOrder, meta, onPagination }: IProps) => {
+  const { data } = users! ?? [];
 
   const router = useRouter();
 
@@ -45,13 +54,15 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
           columns={[
             {
               title: t('table:table-item-image'),
-              dataIndex: 'defaultImageLink',
-              key: 'defaultImageLink',
+              dataIndex: 'avatarLink',
+              key: 'avatarLink',
               showSorterTooltip: false,
-              width: 74,
+              fixed: 'left',
+
+              width: 42,
               render: (imageLink) => (
                 <Image
-                  src={imageLink}
+                  src={imageLink ?? siteSettings?.avatar?.placeholder}
                   width={42}
                   height={42}
                   alt={'image'}
@@ -61,83 +72,90 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
             },
             {
               title: t('table:table-item-name'),
-              dataIndex: 'name',
-              key: 'name',
+              dataIndex: 'fullname',
+              key: 'fullname',
               sorter: true,
               showSorterTooltip: false,
               align: 'left',
+              fixed: 'left',
               width: 100,
               ellipsis: true,
             },
             {
-              title: t('table:table-item-code'),
-              dataIndex: 'code',
-              key: 'code',
+              title: t('table:table-item-username'),
+              dataIndex: 'username',
+              key: 'username',
               align: 'left',
-              width: 100,
-              ellipsis: true,
-            },
-            {
-              title: t('table:table-item-productType'),
-              dataIndex: 'productType',
-              key: 'productType',
-              align: 'left',
-              width: 100,
-              ellipsis: true,
-              render: (productType) => productType?.name,
-            },
-            {
-              title: t('table:table-item-brand'),
-              dataIndex: 'brand',
-              key: 'brand',
-              align: 'left',
-              width: 100,
-              ellipsis: true,
-              render: (brand) => brand?.name,
-            },
-            {
-              title: t('table:table-item-slug'),
-              dataIndex: 'slug',
-              key: 'slug',
-              align: 'left',
-              width: 100,
-              ellipsis: true,
-            },
-            {
-              title: t('table:table-item-price'),
-              dataIndex: 'price',
-              key: 'price',
-              sorter: true,
-              showSorterTooltip: false,
-              align: 'left',
-              width: 100,
-              ellipsis: true,
-              render: (price) => {
-                var formater = new Intl.NumberFormat('it-IT', {
-                  style: 'currency',
-                  currency: 'VND',
-                });
+              fixed: 'left',
 
-                return formater.format(price);
+              width: 100,
+              ellipsis: true,
+            },
+            {
+              title: t('table:table-item-email'),
+              dataIndex: 'email',
+              key: 'email',
+              align: 'left',
+              fixed: 'left',
+
+              width: 100,
+              ellipsis: true,
+            },
+            {
+              title: t('table:table-item-role'),
+              dataIndex: 'role',
+              key: 'role',
+              align: 'left',
+              fixed: 'left',
+              width: 50,
+              ellipsis: true,
+            },
+            {
+              title: t('table:table-item-gender'),
+              dataIndex: 'gender',
+              key: 'gender',
+              fixed: 'left',
+              align: 'left',
+              width: 50,
+              ellipsis: true,
+              render: (value: number) => {
+                return <> {genderMap.get(value)}</>;
               },
             },
             {
-              title: t('table:table-item-starPoint'),
-              dataIndex: 'starPoint',
-              key: 'startPoint',
-              sorter: true,
-              showSorterTooltip: false,
+              title: t('table:table-item-status'),
+              dataIndex: 'isActive',
+              key: 'isActive',
+              fixed: 'left',
               align: 'left',
-              width: 100,
+              width: 40,
               ellipsis: true,
+              render: (value: number) => {
+                return (
+                  <>
+                    {value === USER_ACTIVE.ACTIVE ? (
+                      <div className="text-accent transition duration-200 hover:text-accent focus:outline-none">
+                        <CheckMarkCircle width={20} />
+                      </div>
+                    ) : (
+                      <div className=" text-red-500 transition duration-200 hover:text-red-600 focus:outline-none">
+                        <BanUser width={20} />
+                      </div>
+                    )}
+                  </>
+                );
+              },
             },
             {
-              title: t('table:table-item-countInStock'),
-              dataIndex: 'countInStock',
-              key: 'countInStock',
+              title: t('table:table-item-birthday'),
+              dataIndex: 'birthday',
+              key: 'birthday',
+              showSorterTooltip: false,
               align: 'left',
+              fixed: 'left',
               width: 100,
               ellipsis: true,
+              render: (birthday: Date) => <DateComponent date={birthday} />,
             },
             {
               title: t('table:table-item-createdAt'),
@@ -145,21 +163,11 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
               key: 'createdAt',
               align: 'left',
               sorter: true,
+              fixed: 'left',
               showSorterTooltip: false,
               width: 100,
               ellipsis: true,
               render: (createdAt: Date) => <DateComponent date={createdAt} />,
-            },
-            {
-              title: t('table:table-item-updatedAt'),
-              dataIndex: 'updatedAt',
-              key: 'updatedAt',
-              sorter: true,
-              showSorterTooltip: false,
-              align: 'left',
-              width: 100,
-              ellipsis: true,
-              render: (updatedAt: Date) => <DateComponent date={updatedAt} />,
             },
             {
               title: t('table:table-item-actions'),
@@ -167,12 +175,21 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
               dataIndex: 'id',
               align: 'left',
               fixed: 'right',
-              width: 80,
-              render: (id: string) => <ActionButtons id={id} />,
+              width: 60,
+              render: (id: string, { isActive }) => (
+                <ActionButtons
+                  detailsModalView="DETAILS_USER"
+                  id={id}
+                  userStatus={true}
+                  isUserActive={isActive === USER_ACTIVE.ACTIVE}
+                />
+              ),
             },
           ]}
           dataSource={data}
-          locale={{ emptyText: <span>{t('table:empty-table-data')}</span> }}
+          locale={{
+            emptyText: <span>{t('table:empty-table-data')}</span>,
+          }}
           rowKey="id"
           scroll={{ x: 900 }}
           pagination={false}
@@ -182,4 +199,4 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
   );
 };
 
-export default ProductList;
+export default UserList;

@@ -1,18 +1,19 @@
-import { BanUser } from "@components/icons/ban-user";
-import EditIcon from "@components/icons/edit";
-import Trash from "@components/icons/trash";
-import { Eye } from "@components/icons/eye-icon";
-import Link from "@components/ui/link";
-import { useTranslation } from "next-i18next";
-import { CheckMarkCircle } from "@components/icons/checkmark-circle";
-import { useModalAction } from "@components/ui/modal/modal.context";
-import { CloseFillIcon } from "@components/icons/close-fill";
+import { BanUser } from '@components/icons/ban-user';
+import EditIcon from '@components/icons/edit';
+import Trash from '@components/icons/trash';
+import { Eye } from '@components/icons/eye-icon';
+import Link from '@components/ui/link';
+import { useTranslation } from 'next-i18next';
+import { CheckMarkCircle } from '@components/icons/checkmark-circle';
+import { useModalAction } from '@components/ui/modal/modal.context';
+import { CloseFillIcon } from '@components/icons/close-fill';
 
 type Props = {
   id: string;
   deleteModalView?: string | any;
   editUrl?: string;
   detailsUrl?: string;
+  detailsModalView?: string | any;
   isUserActive?: boolean;
   userStatus?: boolean;
   isShopActive?: boolean;
@@ -22,6 +23,7 @@ type Props = {
 const ActionButtons = ({
   id,
   deleteModalView,
+  detailsModalView,
   editUrl,
   detailsUrl,
   userStatus = false,
@@ -34,14 +36,17 @@ const ActionButtons = ({
   function handleDelete() {
     openModal(deleteModalView, id);
   }
+  function handleDetail() {
+    openModal(detailsModalView, id);
+  }
   function handleUserStatus(type: string) {
-    openModal("BAN_CUSTOMER", { id, type });
+    openModal('BAN_CUSTOMER', { id, type });
   }
   function handleShopStatus(status: boolean) {
     if (status === true) {
-      openModal("SHOP_APPROVE_VIEW", id);
+      openModal('SHOP_APPROVE_VIEW', id);
     } else {
-      openModal("SHOP_DISAPPROVE_VIEW", id);
+      openModal('SHOP_DISAPPROVE_VIEW', id);
     }
   }
   return (
@@ -50,7 +55,7 @@ const ActionButtons = ({
         <button
           onClick={handleDelete}
           className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
-          title={t("text-delete")}
+          title={t('text-delete')}
         >
           <Trash width={16} />
         </button>
@@ -60,7 +65,7 @@ const ActionButtons = ({
           <button
             onClick={() => handleShopStatus(true)}
             className="text-accent transition duration-200 hover:text-accent-hover focus:outline-none"
-            title={t("text-approve-shop")}
+            title={t('text-approve-shop')}
           >
             <CheckMarkCircle width={20} />
           </button>
@@ -68,7 +73,7 @@ const ActionButtons = ({
           <button
             onClick={() => handleShopStatus(false)}
             className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
-            title={t("text-disapprove-shop")}
+            title={t('text-disapprove-shop')}
           >
             <CloseFillIcon width={20} />
           </button>
@@ -77,17 +82,17 @@ const ActionButtons = ({
         <>
           {isUserActive ? (
             <button
-              onClick={() => handleUserStatus("ban")}
+              onClick={() => handleUserStatus('lock')}
               className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
-              title={t("text-ban-user")}
+              title={t('text-ban-user')}
             >
               <BanUser width={20} />
             </button>
           ) : (
             <button
-              onClick={() => handleUserStatus("active")}
+              onClick={() => handleUserStatus('unlock')}
               className="text-accent transition duration-200 hover:text-accent focus:outline-none"
-              title={t("text-activate-user")}
+              title={t('text-activate-user')}
             >
               <CheckMarkCircle width={20} />
             </button>
@@ -99,7 +104,7 @@ const ActionButtons = ({
         <Link
           href={editUrl}
           className="text-base transition duration-200 hover:text-heading"
-          title={t("text-edit")}
+          title={t('text-edit')}
         >
           <EditIcon width={16} />
         </Link>
@@ -108,10 +113,19 @@ const ActionButtons = ({
         <Link
           href={detailsUrl}
           className="ml-2 text-base transition duration-200 hover:text-heading"
-          title={t("text-view")}
+          title={t('text-view')}
         >
           <Eye width={24} />
         </Link>
+      )}
+      {detailsModalView && (
+        <button
+          onClick={handleDetail}
+          className="ml-2 text-base transition duration-200 hover:text-heading"
+          title={t('text-view')}
+        >
+          <Eye width={24} />
+        </button>
       )}
     </div>
   );

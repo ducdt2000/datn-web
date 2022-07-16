@@ -24,3 +24,12 @@ export const productValidationSchema = yup.object().shape({
   //     })
   //   ),
 });
+
+export const productValidationUpdateSchema = yup.object().shape({
+  name: yup.string(),
+  code: yup.string(),
+  productTypeId: yup.string(),
+  brandId: yup.string(),
+  price: yup.number().min(0, 'form:error-price-min'),
+  imageLinks: yup.array().min(1, 'form:error-imageLinks-min').of(yup.string()),
+});

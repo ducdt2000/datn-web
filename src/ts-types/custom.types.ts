@@ -24,6 +24,22 @@ export type ProductsQueryOptionsType = {
   orderType?: ORDER_TYPE;
 };
 
+export type UsersQueryOptionsType = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  city?: string;
+  district?: string;
+  role?: string;
+  gender?: number;
+  status?: number;
+  withDelete?: boolean;
+  dateFrom?: Date;
+  dateTo?: Date;
+  orderBy?: USER_ORDER_BY;
+  orderType?: ORDER_TYPE;
+};
+
 export type CategoriesQueryOptionsType = {
   type?: string;
   text?: string;

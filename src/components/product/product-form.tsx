@@ -2,7 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { productValidationSchema } from './product-validation-schema';
+import {
+  productValidationSchema,
+  productValidationUpdateSchema,
+} from './product-validation-schema';
 import { useCreateProductMutation } from '@data/products/use-create-product.mutation';
 import { useUpdateProductMutation } from '@data/products/use-update-product.mutation';
 import Input from '@components/ui/input';
@@ -117,7 +120,9 @@ export default function ProductForm({ initialValues }: IProps) {
     formState: { errors },
   } = useForm<FormValues>({
     shouldUnregister: true,
-    //resolver: yupResolver(productValidationSchema),
+    resolver: initialValues
+      ? yupResolver(productValidationUpdateSchema)
+      : yupResolver(productValidationSchema),
     //@ts-ignore
     defaultValues: initialValues ?? { imageLinks: [], properties: [] },
   });
@@ -182,7 +187,6 @@ export default function ProductForm({ initialValues }: IProps) {
           },
           onError: (error: any, _variable, _options) => {
             setErrorMessage(error?.response?.data?.error?.message);
-            console.log('thissierrord', error?.response?.data?.error?.message);
           },
         }
       );

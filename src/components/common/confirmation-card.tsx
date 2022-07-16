@@ -1,36 +1,46 @@
-import TrashIcon from "@components/icons/trash";
-import Button from "@components/ui/button";
-import { useTranslation } from "next-i18next";
-import cn from "classnames";
+import TrashIcon from '@components/icons/trash';
+import Button from '@components/ui/button';
+import { useTranslation } from 'next-i18next';
+import cn from 'classnames';
 
 type ConfirmationCardProps = {
   onCancel: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
+  onAccept?: () => void;
+  isDelete?: boolean;
   title?: string;
   icon?: any;
   description?: string;
   cancelBtnClassName?: string;
   deleteBtnClassName?: string;
+  acceptBtnClassName?: string;
   cancelBtnText?: string;
   deleteBtnText?: string;
+  acceptBtnText?: string;
   cancelBtnLoading?: boolean;
   deleteBtnLoading?: boolean;
+  acceptBtnLoading?: boolean;
 };
 
 const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
   onCancel,
   onDelete,
+  onAccept,
+  isDelete = true,
   icon,
-  title = "button-delete",
-  description = "delete-item-confirm",
-  cancelBtnText = "button-cancel",
-  deleteBtnText = "button-delete",
+  title = 'button-delete',
+  description = 'delete-item-confirm',
+  cancelBtnText = 'button-cancel',
+  deleteBtnText = 'button-delete',
+  acceptBtnText = 'button-accept',
   cancelBtnClassName,
   deleteBtnClassName,
+  acceptBtnClassName,
   cancelBtnLoading,
   deleteBtnLoading,
+  acceptBtnLoading,
 }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   return (
     <div className="p-4 pb-6 bg-light m-auto max-w-sm w-full rounded-md md:rounded-xl sm:w-[24rem]">
       <div className="w-full h-full text-center">
@@ -52,7 +62,7 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
                 disabled={cancelBtnLoading}
                 variant="custom"
                 className={cn(
-                  "w-full py-2 px-4 bg-accent focus:outline-none hover:bg-accent-hover focus:bg-accent-hover text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md",
+                  'w-full py-2 px-4 bg-accent focus:outline-none hover:bg-accent-hover focus:bg-accent-hover text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md',
                   cancelBtnClassName
                 )}
               >
@@ -60,20 +70,37 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
               </Button>
             </div>
 
-            <div className="w-1/2">
-              <Button
-                onClick={onDelete}
-                loading={deleteBtnLoading}
-                disabled={deleteBtnLoading}
-                variant="custom"
-                className={cn(
-                  "w-full py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700 focus:bg-red-700 text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md",
-                  deleteBtnClassName
-                )}
-              >
-                {t(deleteBtnText)}
-              </Button>
-            </div>
+            {isDelete ? (
+              <div className="w-1/2">
+                <Button
+                  onClick={onDelete}
+                  loading={deleteBtnLoading}
+                  disabled={deleteBtnLoading}
+                  variant="custom"
+                  className={cn(
+                    'w-full py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700 focus:bg-red-700 text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md',
+                    deleteBtnClassName
+                  )}
+                >
+                  {t(deleteBtnText)}
+                </Button>
+              </div>
+            ) : (
+              <div className="w-1/2">
+                <Button
+                  onClick={onAccept}
+                  loading={acceptBtnLoading}
+                  disabled={acceptBtnLoading}
+                  variant="custom"
+                  className={cn(
+                    'w-full py-2 px-4 bg-accent focus:outline-none hover:bg-accent-hover focus:bg-accent-hover text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md',
+                    acceptBtnClassName
+                  )}
+                >
+                  {t(acceptBtnText)}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

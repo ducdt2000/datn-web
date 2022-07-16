@@ -17,7 +17,6 @@ const Avatar: React.FC<AvatarProps> = ({
   onClick,
   ...rest
 }) => {
-  console.log('thisiscompoent', src);
   return (
     <div
       className={cn(
