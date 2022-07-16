@@ -35,6 +35,12 @@ export declare type UserAddress = {
   zip?: Maybe<Scalars['String']>;
   street_address?: Maybe<Scalars['String']>;
 };
+
+export const genderMap = new Map<number, string>();
+genderMap.set(1, 'option:male-name');
+genderMap.set(2, 'option:female-name');
+genderMap.set(3, 'option:other-name');
+
 export declare type User = {
   id: Scalars['ID'];
   fullname: Scalars['String'];

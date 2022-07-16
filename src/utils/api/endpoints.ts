@@ -12,6 +12,8 @@ export const API_ENDPOINTS = {
   LOGIN: 'auth/login',
   PRODUCT_TYPES: 'product-types',
   PRODUCTS: 'products',
+  LOCK_ACCOUNT: 'users/lock-account',
+  UNLOCK_ACCOUNT: 'users/unlock-account',
   POPULAR_PRODUCTS: 'popular-products',
   COUPONS: 'coupons',
   CUSTOMERS: 'customers',
