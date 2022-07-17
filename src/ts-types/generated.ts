@@ -61,6 +61,75 @@ export declare type User = {
   deletedAt: Maybe<Scalars['Date']>;
 };
 
+export declare type Warehouse = {
+  id: Scalars['ID'];
+  managerUserId: Scalars['String'];
+  name: string;
+  address: string;
+  city: string;
+  status: number;
+  district: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Maybe<Date>;
+  items: WarehouseItem[];
+  warehouseLogs: WarehouseLog[];
+  manager: User;
+};
+
+export declare type WarehouseLog = {
+  id: string;
+  userId: string;
+  warehouseId: string;
+  type: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  itemLogs: WarehouseItemLog[];
+};
+
+export declare type WarehouseItemLog = {
+  id: string;
+  warehouseLogId: string;
+  itemId: string;
+  amount: number;
+};
+
+export declare type WarehouseItem = {
+  id: string;
+  productId: string;
+  warehouseId: string;
+  name: string;
+  price: number;
+  description?: string;
+  code: string;
+  amount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  properties: WarehouseProperty[];
+};
+
+export declare type WarehouseItemInput = {
+  productId: string;
+  name: string;
+  price: number;
+  description?: string;
+  code: string;
+  amount: number;
+  properties: WarehouseProperty[];
+};
+
+export declare type WarehouseProperty = {
+  id: string;
+  itemId: string;
+  name: string;
+  value: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+};
+
 export declare type Profile = {
   id: Scalars['ID'];
   avatar?: Maybe<Attachment>;
@@ -250,6 +319,15 @@ export declare type UserPaginator = {
   /** A list of User items. */
   data: Array<User>;
 };
+
+/** A paginated list of User items. */
+export declare type WarehousePaginator = {
+  /** Pagination information about the list of items. */
+  paginatorInfo: PaginatorInfo;
+  /** A list of User items. */
+  data: Array<Warehouse>;
+};
+
 export declare type AddressInput = {
   title: Scalars['String'];
   default?: Maybe<Scalars['Boolean']>;
@@ -601,12 +679,29 @@ export type UpdateUser = {
   profile?: Maybe<UserProfileInput>;
   address?: Maybe<Array<Maybe<UserAddressUpsertInput>>>;
 };
+
 export type CreateUser = {
   name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   password: Scalars['String'];
   profile?: Maybe<UserProfileInput>;
   address?: Maybe<Array<Maybe<UserAddressUpsertInput>>>;
+};
+
+export type CreateWarehouse = {
+  managerUserId: Scalars['String'];
+  name: Scalars['String'];
+  address: Scalars['String'];
+  city: Scalars['String'];
+  district: Scalars['String'];
+};
+
+export type UpdateWarehouse = {
+  managerUserId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  district?: Maybe<Scalars['String']>;
 };
 
 export type SocialInput = {

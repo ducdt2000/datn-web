@@ -5,15 +5,8 @@ export const productValidationSchema = yup.object().shape({
   code: yup.string().required('form:error-code-required'),
   productTypeId: yup.string().required('form:error-productType-required'),
   brandId: yup.string().required('form:error-brand-required'),
-  price: yup
-    .number()
-    .min(0, 'form:error-price-min')
-    .required('form:error-price-required'),
-  imageLinks: yup
-    .array()
-    .min(1, 'form:error-imageLinks-min')
-    .of(yup.string())
-    .required('form:error-imageLinks-required'),
+  price: yup.number().required('form:error-price-required'),
+  imageLinks: yup.array(),
   // properties: yup
   //   .array()
   //   .min(1, 'form:error-properties-min')

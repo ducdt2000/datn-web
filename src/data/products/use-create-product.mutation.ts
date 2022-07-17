@@ -18,7 +18,6 @@ export const useCreateProductMutation = () => {
 
   return useMutation(
     ({ variables: { input } }: IProductCreateVariables) => {
-      console.log(input);
       return ProductRepository.create(API_ENDPOINTS.PRODUCTS, input);
     },
     {

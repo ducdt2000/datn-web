@@ -168,7 +168,13 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
               align: 'left',
               fixed: 'right',
               width: 80,
-              render: (id: string) => <ActionButtons id={id} />,
+              render: (id: string) => (
+                <ActionButtons
+                  id={id}
+                  editUrl={`${router.asPath}/${id}/update`}
+                  deleteModalView="DELETE_PRODUCT"
+                />
+              ),
             },
           ]}
           dataSource={data}

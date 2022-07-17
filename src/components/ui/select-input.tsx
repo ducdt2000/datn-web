@@ -16,7 +16,10 @@ const SelectInput = ({
   rules,
   getOptionLabel,
   getOptionValue,
+  formatOptionLabel,
   value,
+  onInputChange,
+  components,
   onChange,
   onBlur,
   isMulti,
@@ -32,10 +35,15 @@ const SelectInput = ({
       {...rest}
       render={({ field: { value, onChange, onBlur, ref } }) => (
         <Select
+          components={components ?? undefined}
           inputRef={ref}
           value={options?.find((o: any) => o.value === value)}
-          onChange={(val: any) => onChange(val.value)}
+          onChange={(val: any) => {
+            onChange(val.value);
+          }}
           onBlur={onBlur}
+          formatOptionLabel={formatOptionLabel}
+          onInputChange={onInputChange}
           getOptionLabel={getOptionLabel}
           getOptionValue={getOptionValue}
           isMulti={isMulti}
