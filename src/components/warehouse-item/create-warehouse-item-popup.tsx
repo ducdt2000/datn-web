@@ -14,9 +14,13 @@ import { useCreateWarehouseItemMutation } from '@data/warehouses/use-create-ware
 import { toast } from 'react-toastify';
 import { components } from 'react-select';
 import Button from '@components/ui/button';
+import Card from '@components/common/card';
+import PropertyBadges from './property-badges';
+import Input from '@components/ui/input';
 
 type FormValues = {
   product: {
+    id: string;
     productId: string;
     name: string;
     code: string;
@@ -111,6 +115,7 @@ const WarehouseItem = () => {
   const warehouseId = router.query?.id as string;
 
   const [product, setProduct] = useState<any>({});
+  const propertyMap = new Map<string, string>();
 
   const {
     register,
@@ -132,8 +137,11 @@ const WarehouseItem = () => {
 
   const onSubmit = async (values: FormValues) => {
     const input = values.product;
-
-    console.log('thisisinput', input);
+    input.productId = values.product.id;
+    input.properties = Array.from(propertyMap, ([name, value]) => ({
+      name,
+      value,
+    }));
 
     createItem(
       { variables: { input, id: warehouseId } },
@@ -162,18 +170,38 @@ const WarehouseItem = () => {
               errors={errors}
               setValue={onProductChange}
             />
-          </div>
-          <div>
-            {product?.properties?.map(
-              (property: { name: string; values: [] }) => (
-                <div>
-                  {property.name}: {property.values.join(', ')}
-                </div>
-              )
-            )}
+            <div>
+              {product?.properties?.map(
+                (property: { name: string; values: [] }) => (
+                  <div>
+                    <Card className="bg-gray-50">
+                      <PropertyBadges
+                        name={property.name}
+                        values={property.values}
+                        setKeyValue={(name: string, value: string) => {
+                          propertyMap.set(name, value);
+                        }}
+                      />
+                    </Card>
+                  </div>
+                )
+              )}
+            </div>
+            <div>
+              <Input
+                type="number"
+                label={t('form:input-label-amount')}
+                {...register('product.amount')}
+                variant="outline"
+                className="mb-4 mt-5"
+                error={t(errors?.product?.amount?.message!)}
+              />
+            </div>
+            <Button loading={creating} className="mt-5">
+              {t('form:button-label-add-product')}
+            </Button>
           </div>
         </div>
-        <Button loading={creating}>{t('form:button-label-add-product')}</Button>
       </form>
     </article>
   );
