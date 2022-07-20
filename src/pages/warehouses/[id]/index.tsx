@@ -15,6 +15,7 @@ import { ROUTES } from '@utils/routes';
 import { useRouter } from 'next/router';
 import WarehouseLogList from '@components/warehouse/warehouse-log-list';
 import { useModalAction } from '@components/ui/modal/modal.context';
+import WarehouseItemList from '@components/warehouse/warehouse-item-list';
 
 export default function WarehouseDetailPage() {
   const { t } = useTranslation();
@@ -66,6 +67,7 @@ export default function WarehouseDetailPage() {
       </Card>
 
       <WarehouseLogList warehouse={data as Warehouse} />
+      <WarehouseItemList warehouse={data as Warehouse} />
     </>
   );
 }

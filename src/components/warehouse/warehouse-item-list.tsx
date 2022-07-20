@@ -11,11 +11,27 @@ const WarehouseItemList = ({ warehouse }: { warehouse: Warehouse }) => {
     <AntdTable
       columns={[
         {
+          title: t('table:table-item-code'),
+          dataIndex: 'code',
+          key: 'code',
+          align: 'left',
+          fixed: 'left',
+          width: 100,
+          ellipsis: true,
+        },
+        {
           title: t('table:table-item-name'),
           dataIndex: 'name',
           key: 'name',
-          sorter: true,
-          showSorterTooltip: false,
+          align: 'left',
+          fixed: 'left',
+          width: 100,
+          ellipsis: true,
+        },
+        {
+          title: t('table:table-item-amount'),
+          dataIndex: 'amount',
+          key: 'amount',
           align: 'left',
           fixed: 'left',
           width: 100,

@@ -17,6 +17,7 @@ import Button from '@components/ui/button';
 import Card from '@components/common/card';
 import PropertyBadges from './property-badges';
 import Input from '@components/ui/input';
+import { ROUTES } from '@utils/routes';
 
 type FormValues = {
   product: {
@@ -88,7 +89,6 @@ function SelectProduct({
         options={productOptions}
         isLoading={productLoading}
         onInputChange={(value: string, actionMeta: any) => {
-          console.log('thisisaction', value, actionMeta);
           if (actionMeta.action === 'input-change') {
             setSearch(value);
           }
@@ -115,7 +115,8 @@ const WarehouseItem = () => {
   const warehouseId = router.query?.id as string;
 
   const [product, setProduct] = useState<any>({});
-  const propertyMap = new Map<string, string>();
+
+  const [properties, setProperties] = useState<any>({});
 
   const {
     register,
@@ -138,16 +139,20 @@ const WarehouseItem = () => {
   const onSubmit = async (values: FormValues) => {
     const input = values.product;
     input.productId = values.product.id;
-    input.properties = Array.from(propertyMap, ([name, value]) => ({
-      name,
-      value,
-    }));
+
+    input.properties = [];
+    input.amount = values.product.amount;
+
+    Object.keys(properties).forEach((pro) => {
+      input.properties.push({ name: pro, value: properties[pro] });
+    });
 
     createItem(
       { variables: { input, id: warehouseId } },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: any) => {
           toast.success(t('common:successfully-created'));
+          router.reload();
         },
         onError: (error: any) => {
           toast.error(t(`${error?.response?.data?.error?.message}`));
@@ -178,9 +183,13 @@ const WarehouseItem = () => {
                       <PropertyBadges
                         name={property.name}
                         values={property.values}
-                        setKeyValue={(name: string, value: string) => {
-                          propertyMap.set(name, value);
+                        setKeyValue={(value: any) => {
+                          setProperties({
+                            ...properties,
+                            [property.name]: value,
+                          });
                         }}
+                        value={properties[property.name]}
                       />
                     </Card>
                   </div>

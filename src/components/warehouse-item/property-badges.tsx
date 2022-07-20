@@ -2,8 +2,18 @@ import { RadioGroup } from '@headlessui/react';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
-const PropertyBadges = ({ name, values, setKeyValue }: any) => {
-  const [valueSelected, setValueSelected] = useState();
+const PropertyBadges = ({
+  name,
+  values,
+  value,
+  setKeyValue,
+}: {
+  name: any;
+  values: any;
+  value: any;
+  setKeyValue: any;
+}) => {
+  //const [valueSelected, setValueSelected] = useState();
 
   const { t } = useTranslation('common');
 
@@ -14,11 +24,11 @@ const PropertyBadges = ({ name, values, setKeyValue }: any) => {
       </span>
       <div className="flex flex-col flex-wrap">
         <RadioGroup
-          value={valueSelected}
-          onChange={(value: any) => {
-            setValueSelected(value);
-            setKeyValue({ name, value });
-          }}
+          onChange={
+            setKeyValue
+            //setValueSelected(value);
+          }
+          value={value}
           className="flex flex-row"
         >
           {values?.map((value: any) => (
