@@ -1,6 +1,6 @@
 import React from 'react';
 
-type MODAL_VIEWS =
+export type MODAL_VIEWS =
   | 'DELETE_PRODUCT'
   | 'DETAILS_USER'
   | 'DELETE_BRAND'
@@ -19,7 +19,9 @@ type MODAL_VIEWS =
   | 'SHOP_DISAPPROVE_VIEW'
   | 'DELETE_STAFF'
   | 'EXPORT_IMPORT_PRODUCT'
-  | 'EXPORT_IMPORT_ATTRIBUTE';
+  | 'EXPORT_IMPORT_ATTRIBUTE'
+  | 'BAN_WAREHOUSE'
+  | 'CREATE_WAREHOUSE_ITEM';
 
 interface State {
   view?: MODAL_VIEWS;

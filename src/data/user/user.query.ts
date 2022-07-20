@@ -15,6 +15,24 @@ const fetchUsers = async ({ queryKey }: QueryParamsType) => {
   return { users: { data }, meta: rest };
 };
 
+const useManagersQuery = (params: UsersQueryOptionsType, options: any = {}) =>
+  useQuery<any, Error>([API_ENDPOINTS.USERS, params], fetchManagers, {
+    ...options,
+    keepPreviousData: true,
+  });
+
+const fetchManagers = async ({ queryKey }: QueryParamsType) => {
+  const [_key, params] = queryKey;
+
+  const url = createQueryPath(`${API_ENDPOINTS.USERS}/managers`, params);
+
+  const {
+    data: { data, ...rest },
+  } = await UserRepository.all(url);
+
+  return { users: { data }, meta: rest };
+};
+
 const useUsersQuery = (params: UsersQueryOptionsType, options: any = {}) =>
   useQuery<any, Error>([API_ENDPOINTS.USERS, params], fetchUsers, {
     ...options,
@@ -32,4 +50,11 @@ const useUserQuery = (id: string) => {
   return useQuery<any, Error>([API_ENDPOINTS.USERS, id], () => fetchUser(id));
 };
 
-export { useUsersQuery, fetchUsers, useUserQuery, fetchUser };
+export {
+  useUsersQuery,
+  fetchUsers,
+  useUserQuery,
+  fetchUser,
+  fetchManagers,
+  useManagersQuery,
+};

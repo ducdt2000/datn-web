@@ -5,7 +5,10 @@ import { Eye } from '@components/icons/eye-icon';
 import Link from '@components/ui/link';
 import { useTranslation } from 'next-i18next';
 import { CheckMarkCircle } from '@components/icons/checkmark-circle';
-import { useModalAction } from '@components/ui/modal/modal.context';
+import {
+  MODAL_VIEWS,
+  useModalAction,
+} from '@components/ui/modal/modal.context';
 import { CloseFillIcon } from '@components/icons/close-fill';
 
 type Props = {
@@ -14,6 +17,9 @@ type Props = {
   editUrl?: string;
   detailsUrl?: string;
   detailsModalView?: string | any;
+  viewModal?: MODAL_VIEWS;
+  isAnyActive?: boolean;
+  anyStatus?: boolean;
   isUserActive?: boolean;
   userStatus?: boolean;
   isShopActive?: boolean;
@@ -27,7 +33,10 @@ const ActionButtons = ({
   editUrl,
   detailsUrl,
   userStatus = false,
+  anyStatus = false,
+  viewModal,
   isUserActive = false,
+  isAnyActive: isAnyStatus = false,
   isShopActive,
   approveButton = false,
 }: Props) => {
@@ -42,6 +51,11 @@ const ActionButtons = ({
   function handleUserStatus(type: string) {
     openModal('BAN_CUSTOMER', { id, type });
   }
+
+  function handleAnyStatus(type: string, view?: MODAL_VIEWS) {
+    openModal(view, { id, type });
+  }
+
   function handleShopStatus(status: boolean) {
     if (status === true) {
       openModal('SHOP_APPROVE_VIEW', id);
@@ -93,6 +107,27 @@ const ActionButtons = ({
               onClick={() => handleUserStatus('unlock')}
               className="text-accent transition duration-200 hover:text-accent focus:outline-none"
               title={t('text-activate-user')}
+            >
+              <CheckMarkCircle width={20} />
+            </button>
+          )}
+        </>
+      )}
+      {anyStatus && (
+        <>
+          {isAnyStatus ? (
+            <button
+              onClick={() => handleAnyStatus('lock', viewModal)}
+              className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
+              title={t('text-ban-title')}
+            >
+              <BanUser width={20} />
+            </button>
+          ) : (
+            <button
+              onClick={() => handleAnyStatus('unlock', viewModal)}
+              className="text-accent transition duration-200 hover:text-accent focus:outline-none"
+              title={t('text-activate-title')}
             >
               <CheckMarkCircle width={20} />
             </button>

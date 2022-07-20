@@ -40,6 +40,16 @@ export type UsersQueryOptionsType = {
   orderType?: ORDER_TYPE;
 };
 
+export type WarehousesQueryOptionsType = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  managerUserId?: string;
+  status?: number;
+  orderBy?: string;
+  orderType?: ORDER_TYPE;
+};
+
 export type CategoriesQueryOptionsType = {
   type?: string;
   text?: string;
