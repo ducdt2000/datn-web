@@ -142,6 +142,42 @@ export enum COMMENT_TYPE {
   REPLY = 'reply',
 }
 
+export enum ORDER_STATUS {
+  CREATING = 0,
+  CREATED = 1,
+  OrderProcessing = 2,
+  ReadyToDispatch = 3,
+  OrderDispatched = 4,
+  AtLocalFacility = 5,
+  CANCELLED = 6,
+  DONE = 7,
+}
+
+export const OrderStatusOptions = [
+  { value: 1, name: 'Created' },
+  { value: 2, name: 'Order Processing' },
+  { value: 3, name: 'Ready To Dispatch' },
+  { value: 4, name: 'Order Dispatched' },
+  { value: 5, name: 'At Local Facility' },
+];
+
+export const ORDER_STATUS_NAME = {
+  0: 'Creating',
+  1: 'Created',
+  2: 'Order Processing',
+  3: 'Ready To Dispatch',
+  4: 'Order Dispatched',
+  5: 'At Local Facility',
+};
+
+export const ORDER_STATUS_COLOR = {
+  1: '#23b848',
+  2: '#d87b64',
+  3: '#d87b64',
+  4: '#d87b64',
+  5: '#d87b64',
+};
+
 export enum BRAND_TYPE {
   LOCAL = 'local',
   FOREIGN = 'foreign',
@@ -191,17 +227,6 @@ export enum WAREHOUSE_ORDER_BY {
 
 export enum WAREHOUSE_LOG_ORDER_BY {
   CREATED_AT = 'createdAt',
-}
-
-export enum ORDER_STATUS {
-  CREATING = 0,
-  CREATED = 1,
-  CONFIRM = 2,
-  PACKING = 3,
-  DELIVERING = 4,
-  DELIVERED = 5,
-  CANCELLED = 6,
-  DONE = 7,
 }
 
 export enum GENDER {

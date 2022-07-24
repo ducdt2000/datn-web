@@ -6,7 +6,7 @@ export interface State {
 const initialState = {
   siteTitle: 'PickBazar',
   siteSubtitle: '',
-  currency: 'USD',
+  currency: 'VND',
   logo: {
     id: 1,
     thumbnail: '/logo.svg',

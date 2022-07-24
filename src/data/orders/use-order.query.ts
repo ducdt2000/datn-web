@@ -13,14 +13,25 @@ const fetchOrders = async ({ queryKey }: QueryParamsType) => {
     data: { data, ...rest },
   } = await Order.all(path);
 
-  return { orders: { data } };
+  return { orders: { data }, meta: rest };
 };
 
-const useOrderQuery = (params: OrderQuery, options: any = {}) => {
+const fetchOrder = async (id: string) => {
+  const {
+    data: { data },
+  } = await Order.find(`${API_ENDPOINTS.ORDERS}/${id}`);
+  return data;
+};
+
+const useOrderQuery = (id: string) => {
+  return useQuery<any, Error>([API_ENDPOINTS.ORDERS, id], () => fetchOrder(id));
+};
+
+const useOrdersQuery = (params: OrderQuery, options: any = {}) => {
   return useQuery<any, Error>([API_ENDPOINTS.ORDERS, params], fetchOrders, {
     ...options,
     keepPreviousData: true,
   });
 };
 
-export { useOrderQuery, fetchOrders };
+export { useOrdersQuery, fetchOrders, fetchOrder, useOrderQuery };

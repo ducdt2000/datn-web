@@ -467,22 +467,10 @@ export declare type CouponUpdateInput = {
   expire_at?: Maybe<Scalars['DateTime']>;
 };
 export declare type UpdateOrder = {
-  tracking_number?: Maybe<Scalars['String']>;
-  customer_id?: Maybe<Scalars['ID']>;
-  status?: Maybe<Scalars['ID']>;
-  products?: Array<ConnectProductOrderPivot>;
-  amount?: Maybe<Scalars['Float']>;
-  sales_tax?: Maybe<Scalars['Float']>;
-  total?: Maybe<Scalars['Float']>;
-  paid_total?: Maybe<Scalars['Float']>;
-  payment_id?: Maybe<Scalars['String']>;
-  payment_gateway?: Maybe<Scalars['String']>;
-  coupon_id?: Maybe<Scalars['ID']>;
-  discount?: Maybe<Scalars['Float']>;
-  delivery_fee?: Maybe<Scalars['Float']>;
-  delivery_time?: Maybe<Scalars['String']>;
-  billing_address?: Maybe<UserAddressInput>;
-  shipping_address?: Maybe<UserAddressInput>;
+  status: Scalars['Int'];
+  address?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  district?: Maybe<Scalars['String']>;
 };
 export declare type CreateOrder = {
   tracking_number: Scalars['String'];

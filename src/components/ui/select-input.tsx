@@ -39,7 +39,7 @@ const SelectInput = ({
           inputRef={ref}
           value={options?.find((o: any) => o.value === value)}
           onChange={(val: any) => {
-            onChange(val.value);
+            onChange(val?.value ?? undefined);
           }}
           onBlur={onBlur}
           formatOptionLabel={formatOptionLabel}
