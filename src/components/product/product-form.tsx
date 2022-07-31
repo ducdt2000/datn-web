@@ -285,7 +285,7 @@ export default function ProductForm({ initialValues }: IProps) {
                     onClick={() => remove(index)}
                     title={t('form:button-label-remove')}
                   >
-                    {`- ${t('form:button-label-removeProperties')}`}
+                    {`${t('form:button-label-removeProperties')}`}
                   </Button>
                   <div>
                     <ValueArray

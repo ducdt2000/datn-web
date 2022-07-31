@@ -109,10 +109,10 @@ export default function UsersPage() {
           onCreatedTo={(value: any) => setDateTo(value)}
           onCityFilter={(o: any) => setCity(o)}
           onDistrictFilter={(o: any) => setDistrict(o)}
-          onRoleFilter={(o: any) => setRole(o.value)}
-          onStatusFilter={(o: any) => setStatus(o.value)}
-          onWithDeleteFilter={(o: any) => setWithDelete(o.value)}
-          onGenderFilter={(o: any) => setGender(o.value)}
+          onRoleFilter={(o: any) => setRole(o?.value)}
+          onStatusFilter={(o: any) => setStatus(o?.value)}
+          onWithDeleteFilter={(o: any) => setWithDelete(o?.value)}
+          onGenderFilter={(o: any) => setGender(o?.value)}
           className="w-full md:mr-5"
         />
       </Card>

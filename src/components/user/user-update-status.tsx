@@ -26,8 +26,8 @@ const UserUpdateStatusView = () => {
     <ConfirmationCard
       isDelete={false}
       icon={<SettingsIcon className="mt-4 w-12 h-12 m-auto text-accent" />}
-      title={type === 'lock' ? 'user-lock-confirm' : 'user-unlock-confirm'}
-      description={'update-userStatus-confirm'}
+      title={type === 'lock' ? 'Lock User ?' : 'Unlock User ?'}
+      description={'Update status of user'}
       onCancel={closeModal}
       onAccept={handleUpdate}
       acceptBtnLoading={loading}

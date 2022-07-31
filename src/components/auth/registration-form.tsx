@@ -21,15 +21,15 @@ import moment from 'moment';
 import ValidationError from '@components/ui/form-validation-error';
 import { useLoginMutation } from '@data/user/use-login.mutation';
 const genderOptions = [
-  { value: +GENDER.MALE, name: 'option:male-name' },
-  { value: +GENDER.FEMALE, name: 'option:female-name' },
-  { value: +GENDER.OTHER, name: 'option:other-name' },
+  { value: +GENDER.MALE, name: 'Male' },
+  { value: +GENDER.FEMALE, name: 'Female' },
+  { value: +GENDER.OTHER, name: 'Other' },
 ];
 
 const roleOptions = [
-  { value: ROLE.USER, name: 'option:user-name' },
-  { value: ROLE.STAFF, name: 'option:staff-name' },
-  { value: ROLE.ADMIN, name: 'option:admin-name' },
+  { value: ROLE.USER, name: 'User' },
+  { value: ROLE.STAFF, name: 'Staff' },
+  { value: ROLE.ADMIN, name: 'Admin' },
 ];
 
 type FormValues = {

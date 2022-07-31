@@ -12,9 +12,9 @@ import { CheckMarkCircle } from '@components/icons/checkmark-circle';
 import { BanUser } from '@components/icons/ban-user';
 
 const genderMap = new Map<number, string>();
-genderMap.set(GENDER.FEMALE, 'option:female-name');
-genderMap.set(GENDER.MALE, 'option:male-name');
-genderMap.set(GENDER.OTHER, 'option:other-name');
+genderMap.set(GENDER.FEMALE, 'Female');
+genderMap.set(GENDER.MALE, 'Male');
+genderMap.set(GENDER.OTHER, 'Other');
 
 export type IProps = {
   users?: UserPaginator;
