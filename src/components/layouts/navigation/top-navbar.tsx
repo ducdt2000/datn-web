@@ -40,9 +40,7 @@ const Navbar = () => {
               href={ROUTES.CREATE_SHOP}
               className="ms-4 md:ms-6"
               size="small"
-            >
-              {t('common:text-create-shop')}
-            </LinkButton>
+            ></LinkButton>
           )}
 
           <AuthorizedMenu />

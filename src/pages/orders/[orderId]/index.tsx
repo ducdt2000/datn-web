@@ -50,7 +50,7 @@ function SelectWarehouse({ control, errors }: { control: any; errors: any }) {
   return (
     <>
       <Label>
-        {t('form:input-label-warehouse')}
+        {t('Update Status Order')}
         <Asterisk />
       </Label>
       <SelectInput
@@ -74,11 +74,10 @@ export default function OrderDetailsPage() {
   const { alignLeft, alignRight } = useIsRTL();
 
   const { mutate: updateOrder, isLoading: updating } = useUpdateOrderMutation();
-  const {
-    data,
-    isLoading: loading,
-    error,
-  } = useOrderQuery(query.orderId as string);
+
+  const orderId = query.orderId as string;
+
+  const { data, isLoading: loading, error } = useOrderQuery(orderId);
 
   console.log('thisisdata', data);
 
@@ -186,7 +185,7 @@ export default function OrderDetailsPage() {
     <Card>
       <div className="flex flex-col lg:flex-row items-center">
         <h3 className="text-2xl font-semibold text-heading text-center lg:text-start w-full lg:w-1/3 mb-8 lg:mb-0 whitespace-nowrap">
-          {t('form:input-label-order-id')} - {data?.order?.tracking_number}
+          {t('form:input-label-order-id')} - {orderId}
         </h3>
 
         <form
@@ -276,9 +275,9 @@ export default function OrderDetailsPage() {
             </div>
             <div className="py-4 px-5 border border-border-200 rounded shadow-sm">
               <h3 className="mb-2 text-sm  text-heading font-semibold">
-                {t('text-total')}
+                {t('total')}
               </h3>
-              <p className="text-sm  text-body-dark">{total}</p>
+              <p className="text-sm  text-body-dark">{sub_total}</p>
             </div>
             <div className="py-4 px-5 border border-border-200 rounded shadow-sm">
               <h3 className="mb-2 text-sm  text-heading font-semibold">
@@ -294,19 +293,19 @@ export default function OrderDetailsPage() {
           <div className="flex flex-col lg:flex-row">
             <div className="w-full lg:w-1/2 lg:pe-3 mb-12 lg:mb-0">
               <h2 className="text-xl font-bold text-heading mb-6">
-                {t('text-total-amount')}
+                {t('total amount')}
               </h2>
               <div>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-5/12 sm:w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-sub-total')}
+                    {t('sub total')}
                   </strong>
                   :
                   <span className="w-7/12 sm:w-8/12 ps-4 text-sm ">
                     {sub_total}
                   </span>
                 </p>
-                <p className="flex text-body-dark mt-5">
+                {/* <p className="flex text-body-dark mt-5">
                   <strong className="w-5/12 sm:w-4/12 text-sm  text-heading font-semibold">
                     {t('text-shipping-charge')}
                   </strong>
@@ -314,28 +313,27 @@ export default function OrderDetailsPage() {
                   <span className="w-7/12 sm:w-8/12 ps-4 text-sm ">
                     {shipping_charge}
                   </span>
-                </p>
+                </p> */}
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-5/12 sm:w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-tax')}
+                    {t('tax')}
                   </strong>
                   :<span className="w-7/12 sm:w-8/12 ps-4 text-sm ">{tax}</span>
                 </p>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-5/12 sm:w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-discount')}
+                    {t('discount')}
                   </strong>
-                  :
-                  <span className="w-7/12 sm:w-8/12 ps-4 text-sm ">
-                    {discount}
-                  </span>
+                  :<span className="w-7/12 sm:w-8/12 ps-4 text-sm ">{0}</span>
                 </p>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-5/12 sm:w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-total')}
+                    {t('total')}
                   </strong>
                   :
-                  <span className="w-7/12 sm:w-8/12 ps-4 text-sm">{total}</span>
+                  <span className="w-7/12 sm:w-8/12 ps-4 text-sm">
+                    {sub_total}
+                  </span>
                 </p>
               </div>
             </div>
@@ -343,12 +341,12 @@ export default function OrderDetailsPage() {
 
             <div className="w-full lg:w-1/2 lg:ps-3">
               <h2 className="text-xl font-bold text-heading mb-6">
-                {t('text-order-details')}
+                {t('order details')}
               </h2>
               <div>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-total-item')}
+                    {t('total item')}
                   </strong>
                   :
                   <span className="w-8/12 ps-4 text-sm ">
@@ -357,7 +355,7 @@ export default function OrderDetailsPage() {
                 </p>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-4/12 text-sm  text-heading font-semibold">
-                    {t('text-deliver-time')}
+                    {t('deliver time')}
                   </strong>
                   :
                   <span className="w-8/12 ps-4 text-sm ">
@@ -366,7 +364,7 @@ export default function OrderDetailsPage() {
                 </p>
                 <p className="flex text-body-dark mt-5">
                   <strong className="w-4/12 text-sm text-heading font-semibold">
-                    {t('text-shipping-address')}
+                    {t('shipping address')}
                   </strong>
                   :
                   <span className="w-8/12 ps-4 text-sm ">

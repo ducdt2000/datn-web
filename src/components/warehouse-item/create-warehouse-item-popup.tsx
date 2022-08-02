@@ -52,6 +52,7 @@ function SelectProduct({
   const [productLabel, setProductLabel] = useState();
 
   const productOptions = dataProducts?.products?.data?.map((product: any) => {
+    console.log('thisisproduct', product);
     return {
       value: product,
       name: product.name,
@@ -61,7 +62,9 @@ function SelectProduct({
             <Image
               width={64}
               height={64}
-              src={product.imageLink ?? siteSettings?.product?.placeholder}
+              src={
+                product.defaultImageLink ?? siteSettings?.product?.placeholder
+              }
             />
           </div>
           <div className="col-span-5 flex flex-col">

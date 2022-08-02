@@ -180,6 +180,7 @@ const ProductList = ({ products, onOrder, meta, onPagination }: IProps) => {
           dataSource={data}
           locale={{ emptyText: <span>{t('table:empty-table-data')}</span> }}
           rowKey="id"
+          key={'key'}
           scroll={{ x: 900 }}
           pagination={false}
         ></AntdTable>

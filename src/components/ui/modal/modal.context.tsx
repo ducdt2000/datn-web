@@ -92,6 +92,7 @@ export function useModalAction() {
   }
   return {
     openModal(view?: MODAL_VIEWS, payload?: unknown) {
+      console.log('thisistest');
       dispatch({ type: 'open', view, payload });
     },
     closeModal() {

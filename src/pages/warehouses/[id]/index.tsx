@@ -45,8 +45,9 @@ export default function WarehouseDetailPage() {
       <Card className="flex flex-col xl:flex-row items-center mb-8">
         <div className="md:w-3/4 mb-4 xl:mb-0">
           <h1 className="text-lg font-semibold text-heading">
-            {t('form:input-label-warehouses')}
+            {t('Warehouse')}
           </h1>
+          <span>{data.name}</span>
         </div>
         <button
           onClick={() => {
